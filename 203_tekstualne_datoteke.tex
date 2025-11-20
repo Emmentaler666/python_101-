@@ -1,0 +1,75 @@
+
+\section{Rad s tekstualnim datotekama}
+
+Rad s običnim tekstualnim datotekama važniji je no što se to možda čini na prvi pogled. Na primjer, svaki program nastaje kao običan tekst, cijeli WWW se zasniva na običnom tekstu, kao i razmjena podataka među informacijskim sustavima. Čitanje i pisanje tekstualnih datoteka je stoga neobično važno ne samo za programiranje već i za sveukupno računarstvo.
+
+Glavni mehanizam za čitanje i pisanje tekstualnih datoteka u Pythonu je funkcija \mintinline{python}{open}. Ovisno o parametrima, ova funkcija pristupa nekoj datoteci za potrebe čitanja iz nje ili pisanja u nju. Za razliku od istoimene mogućnosti u programima s grafičkim sučeljem, dakle, funkcija \mintinline{python}{open} samo rezervira određenu datoteku za pristup, a ne usnimava sadržaj datoteke. Radi toga, ova funkcija služi i pisanju u datoteke, a čak i stvaranju novih tekstualnih datoteka. Bez obzira da li čitali ili pisali, nakon što se izvrše potrebne radnje s otvorenom datotekom, istu je potrebno zatvoriti putem metode \mintinline{python}{close}. Pogledajmo kako zapisati neki tekst u novu datoteku:
+
+\pythonfile{Zapisivanje teksta u novu datoteku}{listing:tekst_zapis}{code_python_osnove/text_files/files_a.py}
+
+Funkcija \mintinline{python}{open} prima putanju do datoteke kao prvi parametar, mod rada kao drugi parametar i dodatne parametre od kojih je vrlo korisna specifikacija kodne stranice putem opcionalnog parametra \mintinline{python}{encoding}. Dapače, preporučeno je uvijek definirati \mintinline{python}{encoding} prilikom čitanja i pisanja jer u tom slučaju jasno kontroliramo kodnu stranicu našeg teksta i time sprječavamo gubitak slova i ostalih znakova. U tom smislu, kodna stranica "utf-8" je danas \textit{de-facto} standard.
+
+Putanja može biti apsolutna e.g. ("c:/direktorij/datoteka.txt") ili relativna ("datoteka.txt" ili "direktorij/datoteka.txt"). Ukoliko je putanja relativna, kao u našem primjeru, smatra se da je relativna od direktorija u kojem se nalazi .py datoteka koju smo pokrenuli. Na primjer, putanja "datoteka.txt" se odnosi na datoteku u istom direktoriju u kojem je i pokrenuta .py datoteka. Putanja "neki\_direktorij/datoteka.txt" se odnosi na datoteku "datoteka.txt" koja se nalazi u direktoriju "neki\_direktorij" koji se pak nalazi u istom direktoriju u kojem je i pokrenuta .py datoteka. U ranijem primjeru, u istom direktoriju će nam se pojaviti datoteka "papiga.txt" s tekstom koji smo naredili zapisati.
+
+Funkicija \mintinline{python}{open}, može čitati postojeće datoteke, dodavati u postojeće ili stvarati nove. To kontroliramo putem parametra \mintinline{python}{mode} koji možemo shvatiti kao "mod rada" funkcije \mintinline{python}{open}. Pogledajmo kako dodati neke retke u "papiga.txt" datototeku.
+
+\pythonfile{Dodavanje teksta u postojeću datoteku}{listing:tekst_dodavanje}{code_python_osnove/text_files/files_b.py}
+
+Korisni modovi za \mintinline{python}{open} su:
+
+\begin{itemize}
+\item \textbf{r} - čitaj; \textit{default}
+\item \textbf{w} - stvori i piši; ako datoteka postoji, obriši sadržaj
+\item \textbf{x} - stvori i piši; ako datoteka postoji, javi grešku
+\item \textbf{a} - stvori i piši; ako datoteka postoji, nastavi pisati na kraj
+\end{itemize}
+
+Do sada smo samo pisali u datoteku. Čitanje je jednostavno drugi način operacije funkcije \mintinline{python}{open}. Čitanje je zapravo zadani (eng. \textit{default}) način rada ove funkcije, ali u ovom poglavlju smo prvo stvorili novu datoteku kako bi imali što čitati. Također, parametar \mintinline{python}{"r"} zapravo ne treba navoditi jer se podrazumijeva, ali njegovim navođenjem se mod rada jasnije vidi.
+
+
+\pythonfile{Čitanje teksta iz postojeće datoteke}{listing:tekst_citanje}{code_python_osnove/text_files/files_c.py}
+
+
+\begin{pythonp}{\ref{listing:tekst_citanje}}    
+This parrot is no more!
+He has ceased to be!
+'E's expired and gone to meet 'is maker!
+'Is metabolic processes are now 'istory!
+'E's off the twig!
+..... THIS IS AN EX-PARROT!!
+\end{pythonp}
+
+
+Pogledajmo kako se petlja \mintinline{python}{for} može koristiti u kontekstu čitanja teksta iz datoteke:
+
+
+\pythonfile{Prebiranje po linijama postojeće datoteke}{listing:tekst_prebiranje}{code_python_osnove/text_files/files_d.py}
+
+
+\begin{pythonp}{\ref{listing:tekst_prebiranje}}
+1 This parrot is no more!
+2 He has ceased to be!
+3 'E's expired and gone to meet 'is maker!
+4 'Is metabolic processes are now 'istory!
+5 'E's off the twig!
+6 ..... THIS IS AN EX-PARROT!!
+\end{pythonp}
+
+Drugim riječima, po otvorenoj datoteci se može iterirati po recima teksta. Na ovaj način možemo raditi s datotekama bilo koje veličine pa čak i onima koje nam ne stanu u memoriju jer u svakom trenutku imamo samo jedan redak u memoriji, a ne cijeli tekstualni sadržaj neke datoteke.
+
+
+\subsection{Naredba \mintinline{python}{with}}
+
+Što će se dogoditi s datotekom ako slučajno ne pozovemo naredbu \mintinline{python}{close}? Postoji šansa da se u datoteku nije zapisao sav tekst i da ona u operacijskom sustavu ostane "rezervirana za pristup". Problem s do sada prikazanim načinom zatvaranja datoteke nije samo u tome da možemo zaboraviti provesti naredbu \mintinline{python}{close}, već se može dogoditi da se ona ne provede radi ranije greške. Pogledajmo primjer:
+
+
+\pythonfile{Greška prije pozivanja naredbe \mintinline{python}{close}}{listing:tekst_greska}{code_python_osnove/text_files/files_e.py}
+
+
+Kako riješiti da se naredba \mintinline{python}{close} uvijek izvrši, bez obzira na potencijalne ranije greške u kôdu? Iz onoga što do sad znamo, mogli bismo probati s naredbom \mintinline{python}{try} i ukoliko iskoristimo i komponentu \mintinline{python}{finally} u tome bi i uspjeli\footnote{Za vježbu razmislite kako bismo naredbom \mintinline{python}{try} mogli \textit{garantirati} izvršavanje pozivanje metode \mintinline{python}{close} čak i u slučaju ranije pogreške}. Ipak, ovakvo rješenje se smatra nezgrapnim i nije namijenjeno korištenje naredbe \mintinline{python}{try}. Radi ovakvih i sličnih slučajeva se u noviji Python dodala naredba \mintinline{python}{with} koja je postala idiom upravo za otvaranje i zatvaranje datoteka kao i slične situacije.
+
+
+\pythonfile{Rad s tekstualnim datotekama pomoću naredbe \mintinline{python}{with}}{listing:tekst_with}{code_python_osnove/text_files/files_with.py}
+
+
+Radi elegantnosti izvedbe i vezanu sigurnost, preporuča se koristiti naredbu \mintinline{python}{with}. Prikazani način pristupa tekstualnim datotekama je stoga idiom u novijem Pythonu, ali ne možemo u potpunosti shvatiti kako funkcionira bez razumijevanja koncepata "otvaranja" i "zatvaranja" datoteka. Također, postoje slučajevi u kojima je korištenje naredbe \mintinline{python}{with} nezgrapno. U tim slučajevima možemo nastaviti koristiti metodu \mintinline{python}{close}.

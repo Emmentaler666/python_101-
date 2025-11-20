@@ -1,0 +1,53 @@
+
+\section{Definicija vlastitih funkcija}
+
+Do sada smo već koristili mnoge funkcije koje dolaze ugrađene u Python (npr. \lstinline{print} ili \lstinline{sum}) kao i one koje su dostupne kroz module (\lstinline{math.floor}).
+
+Funkcije su jedan od osnovnih građevnih elemenata suvremenih programskih jezika i primarna svrha im je implementacija "jedne radnje", koja se zatim može koristiti na više mjesta u nekom programu. Navedeno smanjuje kompleksnost programa i sprječava ponavljanje kôda što samo po sebi čini programe preglednijim te olakšava testiranje i umanjuje mogućnosti grešaka u kôdu. Definicija vlastitih funkcija je stoga ne samo uobičajen nego i praktički nužan postupak prilikom implementacije većih programa. Pogledajmo jednostavan primjer:
+
+\begin{lstlisting}[caption={Definicija vlastite funkcije koja oponaša funkciju "sum"}, label={listing:def_sum}]
+# "def" služi definiciji novih funkcija
+def sum(numbers):
+    total = 0
+    for n in numbers:
+        total += n
+    # "return" označava kraj izvršavanja funkcije te vraća vrijednost koja se se smatra rezultatom
+    return total
+\end{lstlisting}
+
+% TODO maybe make this a bulleted list
+Primjer prikazuje definiciju funkcije koja prima jedan parametar koji mora biti popis brojeva, zbraja sve brojeve te vraća njihov zbroj. Drugim riječima, ova funkcija oponaša ugrađenu funkciju \lstinline{sum}. Riječ \lstinline{def} označava definiciju funkcije te se nakon nje piše naziv funkcije koji podliježe pravilima imenovanju varijabli. Nakon naziva funkcije se u oblim zagradama nabrajaju parametri funkcije. Parametri funkcije su jednostavno varijable putem kojih korisnik funkciji šalje vrijednosti potrebne za izračun. Funkcija iz primjera prima jedan parametar koji je nazvan \lstinline{numbers}. Nazivi parametara su zapravo nazivi varijabli koje možemo koristiti unutar tijela funkcije. Tijelo funkcije se podvlači pod samu liniju koja označava početak definicije funkcije kao što je slučaj i kod kondicionala i petlji.
+
+\subsection{Apstrakcija}
+
+U mnogim jezicima funkcija je temelj apstrakcije, a u nekim jezicima i glavna organizacijska paradigma. Ovakvi jezici se nazivaju \textit{funkcijski jezici} i u njima je funkcija glavni temelj apstrakcije, a izbjegavaju se promjene u stanjima i promjenjivi podaci.
+
+Funkcije se u mnogim jezicima vežu uz klase odnosno nove vrste objekata. Time funkcije najčešće postaju metode tih objekata kao što je, na primjer, metoda \lstinline{upper} vezana uz vrstu \lstinline{str}. Navedeni pristup programiranju se naziva \textit{objektno orijentirano programiranje}, a jezici koji se na njemu zasnivaju \textit{objektno orijentirano jezici} i uvod se može pronaći u poglavlju TODO.
+
+Pogledajmo prvo osnove definicije vlastitih funkcija i detalje oko postavljanja parametara, pa ćemo zatim prikazati korištenje funkcija u praktičnom primjeru.
+
+Već smo rekli da funkcija prima nula ili više parametara, na temelju njih izvršava određen kôd te vraća rezultat. Pogledajmo kako ovo izgleda u praksi prilikom definicije jednostavne vlastite funkcije.
+
+Prije no što krenemo s primjerima korištenja funkcija u praksi, nužno je naučiti kako se ponašaju varijable u tijelu funkcije odnosno koncept "imenskog prostora" te neke detalje oko postavljanja parametara.
+
+
+Abstrakcija
+
+
+\subsection{Imenski prostor}
+
+Kôd koji sačinjava tijelo funkcije se izvršava vlastitom \textit{imenskom prostoru} odnosno nazivi varijabli se ne miješaju s nazivima varijabli izvan funkcije. Prije no što krenemo u detalje pogledajmo primjer koji prikazuje što ovo znači u praksi:
+
+\subsection{Identifikacija parametara redoslijedom i imenom}
+
+\subsection{Posebne vrste parametara}
+
+\subsubsection{Niz od n parametara}
+
+\subsubsection{Parametri s arbitrarnim imenima}
+
+
+Kako bismo mogli definirati funkciju koja zbraja više od jednog broja odnosno koja oponaša već postojeću funkciju \lstinline{sum}?
+
+
+

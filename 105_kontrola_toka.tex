@@ -1,0 +1,443 @@
+
+\section{Kontrola toka: Kondicionali, petlje i pokušaji}\label{kontrola_toka}
+
+% TODO prvojeri korištenje "naredbe" i razmisli o izrazima
+
+% TODO provjeri kako zoveš continue i break, to su jednostavne izjave
+
+U programiranju ne bismo daleko dogurali kada bismo jedino mogli po redu izvršavati jedinične radnje. S jedne strane moramo moći prema određenim uvjetima odabrati koje naredbe će se izvršiti, a koje ne. Ovo postižemo \textit{kondicionalima}. S druge strane moramo moći ponavljati iste naredbe. Ovo postižemo \textit{petljama}. U nastavku ćemo se upoznati s detaljima i riječ je o standardnim komponentama gotovo svih programskih jezika. U mnogim jezicima visoke razine postoji i treći koncept u kontroli toka, a to je \textit{pokušaj} provođenja određenih naredbi s jasno definiranim kôdom koji će se izvršiti ako neka od naredbi ne uspije.
+
+
+\subsection{Kondicionali: Ako ... onda ...}\label{kondicionali}
+
+Kondicionali\index{kondicional} služe \textit{odabiru} kôda koji će se izvršiti. Kada su neke linije ovisne o kondicionalu, tada se neće izvršavati uvijek već samo kada su određeni uvjeti zadovoljeni. Time dobivamo mogućnosti poput: "ako se neki izraz evaluira kao True, napravi nešto; a ako ne, napravi nešto posve drugo". Na taj način možemo reći stvari poput:
+
+\begin{itemize}
+    \item Ako direktorij ne postoji, stvori ga.
+    \item Ako datoteka postoji pitaj korisnika da li ju želi prepisati novom datotekom.
+    \item Ako korisničko ime već postoji, javi da je zauzeto, a ako korisničko ime ne postoji, stvori novog korisnika.
+    \item Ako je korisnik upisao odgovor "a", javi da je odgovor točan, a ako je korisnik upisao "b", "c" ili "d" javi da je odgovor netočan, a u svim ostalim slučajevima javi da odgovor nije prepoznat.
+\end{itemize}
+
+
+\begin{important}{Kondicionali}
+Kondicionali služe uvjetnom izvršavanju kôda. Oni prema određenim uvjetima odabiru koji će se reci izvršiti, a koji ne.
+\end{important}
+
+
+Kondicionale u programskim jezicima tipično reprezentiramo sa složenom izjavom \mintinline{python}{if}, a minimalan oblik te izjave u Pythonu je:
+
+
+\begin{python}{Najjednostavniji oblik kondicionala}{listing:kondicional1}
+if <izraz>:
+    neka radnja
+\end{python}
+
+%TODO referenca na booleve vrijednosti
+"Neka radnja" se izvršava samo ako izraz rezultira vrijednošću koja se procjenjuje kao \mintinline{python}{True} (vidi poglavlje o booleovim vrijednostima za detalje). Ova radnja se mora sastojati od barem jedne linije kôda, ali može se sastojati i od više njih. Konkretnije, ispod svake \mintinline{python}{if} izjave se očekuje uvučeni blok kôda\index{blok kôda}. Taj blok koda, kao što je već rečeno, se naznačuje tako što su sve linije u bloku jednako uvučene i izvršava se samo ako je uvjet zadovoljen, a u suprotnom se preskače.
+
+% TODO uvlačenje, prvi put u uvodu, drugi put ovdje
+Što se uvlačenja kôda\index{uvlačenje kôda} tiče, u Pythonu se uvijek uvlači nakon dvotočke koja se, između ostalog, koristi u kondicionalima i petljama. Općenito je pravilo da Python nakon retka koji završava s dvotočkom očekuje barem jednu uvučen redak kôda odnosno minimalan blok kôda.
+
+Standard u Pythonu je kôd uvlačiti\index{uvlačenje kôda} sa četiri razmaka koji se u prilagođenom softveru dobivaju pritiskom na tipku "tabulator" odnosno "tab". Ovaj koncept se naziva "mekanim tabulatorom" (eng. \textit{soft tab}) jer služi istome čemu služi i sam znak tabulator, ali izbjegava taj znak (što ima i smisla jer je tabulator po definiciji razmak varijabilne dužine). Moguće je koristiti i znak tabulator, ali se treba pobrinuti da se ne miješaju tabulatori i razmaci. Navedeno zvuči kompleksnije no što je slučaj u praksi jer se za ujednačenost uglavnom pobrine softver u kojem programiramo.
+
+
+
+Moguće je napisati i kondicional koji će uvijek izvršiti neki kôd tako što ga proširimo s komponentom \mintinline{python}{else} koja znači "u svim ostalim slučajevima".
+
+\begin{python}{Kondicional koji će uvijek izvršiti radnju}{listing:kondicional3}
+if <izraz>:
+    neka radnja
+else:  #  u svim ostalim slučajevima
+    neka druga radnja
+\end{python}
+
+U ovom obliku, "neka radnja" se izvršava kao i u prošlom, ali ako se ne izvrši, tada će se izvršiti "neka druga radnja". Drugim riječima ovakav kondicional će, za razliku od prošlog oblika, uvijek izvršiti neke naredbe. Pogledajmo neke konkretne primjere:
+
+
+\pythonfile{Neki konkretni primjeri jednostavnih kondicionala}{listing:kondicional4}{code_python_osnove/kondicionali_a.py}
+
+
+Primjer prikazuje tri kondicionala. Prvi kondicional radi nešto samo ako je uvjet zadovoljen. Druga dva kondicionala uvijek rade nešto jer imaju komponentu \mintinline{python}{else} čiji kôd se izvršava kada niti jedan drugi uvjet nije zadovoljen. Izvršavanje prikazanog koda, dakle, ispisati će dvije ili tri rečenice jer prvi prikazani kondicional nema komponentu \mintinline{python}{else} dok druga dva imaju. Koje su to?
+
+
+\begin{pythonp}{\ref{listing:kondicional4}}
+x je veće ili jednako y
+x + y je manje od 10
+\end{pythonp}
+
+
+% TODO usporedba link?
+U prijašnjem primjeru svi izrazi koji se pojavljuju kao uvjeti se evaluiraju u booleove vrijednosti. Kad želimo vidjeti rezultat određenog izraza najjednostavnije je to probati u Python komandnoj liniji.
+
+\begin{comment}
+\begin{lstlisting}[nolol]
+>>> a = "nešto"
+>>> b = "nešto drugo"
+>>> a == b
+False
+>>> x = 5
+>>> y = 3
+>>> x < y
+False
+>>> (x + y) < 10
+True
+\end{lstlisting}
+\end{comment}
+
+
+Što bi se dogodilo da smo koristili izraze koji se ne evaluiraju u booleovu vrijednost poput \mintinline{python}{x + y}? U Pythonu je za potrebe kondicionala moguće i implicitno pretvoriti bilo koju vrijednosti u booleovu vrijednost. Drugim riječima, izjava \mintinline{python}{if vrijednost:} se  izvršava kao da smo pisali \mintinline{python}{if bool(vrijednost):}. Sjetimo se, izraz se uvijek evaluira u vrijednost pa ranije napisano ujedno znači i \mintinline{python}{if bool(izraz)}. Pogledajmo primjer:
+
+\pythonfile{Implicitno pretvaranje u booleove vrijednosti}{listing:kondicional5}{code_python_osnove/kondicionali_b.py}
+
+
+\begin{pythonp}{\ref{listing:kondicional5}}
+bool(b) se evaluira u True
+bool(x + y) se evaluira u True
+\end{pythonp}
+
+
+Kako možemo napisati kondicional koji ima više od jednog eksplicitnog uvjeta (ne računajući \mintinline{python}{else})?  U kondicionalima se često koriste dodatne komponente \textit{else if} koje služe upravo ovome. Python te riječi skraćuje u riječ \mintinline{python}{elif}. Kondicional sa svim dozvoljenim komponentama izgleda ovako:
+
+
+\begin{python}{Kondicional sa svim komponentama}{listing:kondicional6}
+if <izraz1>:
+    radnja 1
+elif <izraz2>:
+    radnja 2
+elif <izraz3>:
+    radnja 3
+...
+else:
+    radnja n
+\end{python}
+
+
+A evo i konkretnog primjera kondicionala sa svim komponentama:
+
+
+\pythonfile{Konkretan primjer kondicionala sa svim komponentama}{listing:kondicional7}{code_python_osnove/kondicionali_c.py}
+
+
+\begin{pythonp}{\ref{listing:kondicional6}}
+slučaj "x je 3"
+\end{pythonp}
+
+
+Drugim riječima, svaki kondicional ima nužno jedan \mintinline{python}{if} slučaj, a može imati i bilo koji broj \mintinline{python}{elif} slučajeva i jedan \mintinline{python}{else} slučaj. Ovakav kondicional smo već vidjeli u primjeru \ref{listing:kviz}, a u idućim poglavljima ćemo za vježbu isprogramirati nešto konkretnije i iskoristiti kondicionale. Upoznajmo se ipak prije toga i s petljama i pokušajima kako bismo zaokružili koncept "kontrole toka".
+
+
+\subsection{Petlje: ponavljanje naredbi}
+
+Petlje\index{petlja} služe \textit{ponavljanju} jedne ili više naredi. S petljama možemo dati instrukcije poput "ponovi kôd za svaki element u popisu" ili "ponavljaj neki kôd sve dok uvjet nije zadovoljen". Time možemo izraditi programe koji na primjer crtaju geometrijske oblike, izrađuju bibliografski zapis za svaku knjigu u nekoj bazi podataka ili čekaju korisnički unos i ponavljaju se sve dok korisnik ne zatraži izlaz iz programa.
+
+\begin{important}{Petlje}
+Petlje ponavljaju naredbe. Iste naredbe treba ponavljati petljama, a ne dupliciranjem kôda.
+\end{important}
+
+\subsubsection{Za svaki}
+
+Petlja koja se vrlo često koristi u programiranju, a u Pythonu je se najčešće koristi petlja \mintinline{python}{for}\index{petlja!for}. Kao i kod kondicionala, ovo je složena izjava. Python koristi \textit{for each} varijantu ove petlje koju skraćuje u naziv \mintinline{python}{for}. Drugim riječima, \mintinline{python}{for} u Pythonu valja čitati "za svaki" i ova petlja ponavlja naredbe za svaki element u nekom skupu elemenata\footnote{U mnogim drugim jezicima se petlja \mintinline{python}{for} ponaša drugačije, a petlja o kojoj je sada riječ se naziva \mintinline{python}{foreach}, \mintinline{python}{for_each} ili što slično.}. Do sada jedina vrsta vrijednosti koju smo upoznali i koja se može raščlaniti na elemente je \mintinline{python}{str}, odnosno niz znakova pa ćemo upravo tu vrstu vrijednosti koristiti za primjere. Petlja \mintinline{python}{for} će postati korisnija kada naučimo i strukture podataka o čemu je riječ u zasebnom poglavlju.
+
+Petljom \mintinline{python}{for} je dakle moguće provesti jednu ili više radnji za svaki znak u nekom tekstu. Pogledajmo kako:
+
+\pythonfile{Osnovan oblik petlje "za svaki"}{listing:for_basic}{code_python_osnove/loops/for_basic.py}
+
+\begin{pythonp}{\ref{listing:for_basic}}
+t
+e
+k
+s
+t
+\end{pythonp}
+
+Koncept "skupa vrijednosti po kojem se može prebirati" vrlo je važan pa ima i vlastitu terminologiju. Prebiranje po nekom skupu vrijednosti često nazivamo \textit{iteracija}\index{iteracija} (eng. \textit{iteration}), a vrsta vrijednosti po kojoj se može prebirati je \textit{iterabilna} (eng. \textit{iterable}) vrsta vrijednosti. Petlja \mintinline{python}{for} se "izvrti određen broj krugova" pa završi. Jedan "krug" nazivamo jednom iteracijom. Iteracija kao proces je, dakle proces prebiranja, a jedna iteracija je individualno izvršavanje naredbi koje se ponavljaju. Jednu iteraciju unutar petlje često nazivamo i korakom {eng. \textit{step}} petlje.
+
+O finijim detaljima spomenutog će biti riječ kasnije kada dođemo do struktura podataka, ali terminologiju vrijedi znati i ranije jer se često koristi u Python dokumentaciji i literaturi kao i u samom Python jeziku prilikom, na primjer, javljanja pogrešaka.
+
+\begin{important}{Iteracija}
+Kada po nečemu iteriramo, tada po tome prebiremo jedan po jedan element. Kada je nešto iterabilno tada se po tome može prebirati. Ove riječi se često koriste u kôdu. Metode čiji naziv počinje s prefiksom "iter" vraćaju rezultatu po kojem se može iterirati. Kada Python javi grešku da nešto nije "iterabilno" tada pokušavamo prebirati po vrsti vrijednosti koja se ne može raščlaniti na sastavne elemente.
+\end{important}
+
+U primjeru \ref{listing:for_basic} smo vidjeli kako možemo raditi sa svakim znakom u nekom tekstu odnosno sa svakim elementom u nekom skupu vrijednosti. U retku \mintinline{python}{for znak in tekst:}, \mintinline{python}{tekst} je skup vrijednosti po kojem se prebire, a \mintinline{python}{znak} je proizvoljan naziv varijable koji unutar petlje možemo koristiti kako bi se referirali na element u "ovoj iteraciji". U prvoj iteraciji, varijabla \mintinline{python}{znak} je jednaka vrijednosti \mintinline{python}{"t"}. U drugoj iteraciji, jednaka je vrijednosti \mintinline{python}{"e"} i tako dalje.
+
+Što ukoliko samo želimo ponoviti neku radnju određen broj puta nevezano za neki već postojeći skup vrijednosti poput vrijednosti \mintinline{python}{"tekst"}? Za ovo nam je korisna funkcija \mintinline{python}{range} koja stvara niz brojeva od nekog minimuma do nekog maksimuma. Ova funkcija je korisnija no što se na prvi pogled možda čini pa ćemo je često susretati. Na primjer, često se koristi u kombinaciji s petljom \mintinline{python}{for} kako bi odredila koliko puta će se naredbe unutar petlje ponoviti. Pogledajmo primjer:
+
+\pythonfile{Ponovi radnju n puta}{listing:for_range}{code_python_osnove/loops/for_range.py}
+
+
+\begin{pythonp}{\ref{listing:for_range}}
+0 tekst
+1 tekst
+2 tekst
+3 tekst
+4 tekst
+\end{pythonp}
+
+Kao što vidimo, kada funkciji \mintinline{python}{range} pošaljemo jedan broj, ona stvara niz brojeva od nule do poslanog broja, ne uključujući i taj broj. Ovdje smo to iskoristili da bismo ponovili radnju 5 puta. Kako bi bilo jasnije što se zbiva, ispisali smo i vrijednost varijable \mintinline{python}{i} svaki put, ali varijablu \mintinline{python}{i} uopće ne moramo koristiti unutar petlje ako nam nije potrebna.
+
+% todo funkcija range
+
+\subsubsection{Dok se uvjet ne zadovolji}
+
+Druga vrsta petlje u Pythonu je petlja \mintinline{python}{while}\index{petlja!while} koja je također često vrlo korisna. Ova petlja ne prebire po nečemu već se izvršava sve dok neki uvjet nije zadovoljen. Njome možemo izvesti isto što i u prošlom primjeru:
+
+\pythonfile{Osnovan oblik petlje "dok se uvjet ne zadovolji"}{listing:while_basic}{code_python_osnove/loops/while_basic.py}
+
+
+\begin{pythonp}{\ref{listing:while_basic}}
+0 tekst
+1 tekst
+2 tekst
+3 tekst
+4 tekst
+\end{pythonp}
+
+Primjer \ref{listing:for_basic} također možemo postići ovom petljom, ali nešto zaobilaznijim putem:
+
+\pythonfile{Prebiranje po nizu vrijednosti s petljom while}{listing:while_index}{code_python_osnove/loops/while_index.py}
+
+
+\begin{pythonp}{\ref{listing:while_index}}
+t
+e
+k
+s
+t
+\end{pythonp}
+
+U prikazanim primjerima svejedno je da li koristimo petlju \mintinline{python}{for} ili petlju \mintinline{python}{while}, ali petlja \mintinline{python}{while} zahtijeva nešto više komponenata. Također, ova petlja krije jednu opasnost koja se u \mintinline{python}{for} petlji može teško dogoditi: lako je moguće da se \mintinline{python}{while} petlja krene izvršavati zauvijek! Idući primjer prikazuje ovakvu grešku i ako ga pokrenete pripremite se da će te morati nasilno ugasiti Python, jer se ovaj program neće nikad završiti.
+
+\pythonfile{Petlja \emph{while} koja se greškom ponavlja beskonačan broj puta}{listing:while_bad_infinite}{code_python_osnove/loops/while_bad_infinite.py}
+
+U prošlom primjeru je greškom ispuštena naredba \mintinline{python}{i += 1} pa se uvjet za završetak ponavljanja kôda nikad neće zadovoljiti. Naredba \mintinline{python}{print("nema kraja")} će se stoga pokušati izvrtiti beskonačan broj puta. Izvršavanje ovog programa će završiti tek kad ga nasilno ugasimo tako što smo prekinuli sistemski proces ili ugasili računalo.
+
+Prikazana beskonačna petlja je rezultat greške i njezino ponašanje je nepoželjno. Ipak, postoje situacije u kojem su beskonačne petlje zapravo vrlo korisne i puno ih je lakše postići petljom \mintinline{python}{while} no petljom \mintinline{python}{for}. Tipičan primjer su aplikacije koje kad se pokrenu čekaju korisničke naredbe koje zatim izvršavaju na zahtjev. Navedeno stoji za gotovo sve aplikacije s grafičkim sučeljem. U ovom slučaju, petlja se nikad neće sama po sebi završiti, ali postoji mehanizam koji ju u posebnim slučajevima može prekinuti. Pogledajmo prvo kako funkcioniraju mehanizmi za prekidanje petlje, a konkretni primjeri korištenja \mintinline{python}{while} petlji u ovom smislu su preneseni kasnije u tekstu.
+
+Postoje dvije jednostavne Python izjave koje služe upravljanju petljama i koje se smiju koristiti samo unutar petlji. Te izjave su \mintinline{python}{break}, koja služi prekidanju petlje i \mintinline{python}{continue}, koja služi prelasku na idući korak petlje.
+
+\subsubsection{Prekini petlju}
+
+Jednostavna izjava \mintinline{python}{break}\index{petlja!break} čim se izvrši završava petlju u kojoj se nalazi. Ova izjava se koristi kada je potrebno izaći iz petlje prije no što bi ona završila sama po sebi.
+
+\pythonfile{Prekid izvršanja petlje "za svaki"}{listing:for_break}{code_python_osnove/loops/for_break.py}
+
+\begin{pythonp}{\ref{listing:for_break}}
+n
+e
+k
+i
+\end{pythonp}
+
+Izjava "prekini petlju", odnosno \mintinline{python}{break}, je nužna u prije spomenutim beskonačnim \mintinline{python}{while} petljama. Pogledajmo praktičan primjer:
+
+\pythonfile{Prekid izvršanja petlje "dok se uvjet ne ispuni"}{listing:while_break}{code_python_osnove/loops/while_good_infinite.py}
+
+Izvrši ovaj program. Kako se ponaša? Ne radi ništa korisno, ali je program koji se ponaša bliže računalnim aplikacijama. Naš "prvi program" odnosno primjer \ref{kviz} se mogao izvršiti samo jednom i onda je izašao. Prikazani mehanizam omogućuje da se program nastavlja, odnosno ponavlja, sve dok korisnik ne odluči prestati raditi s njim.
+
+Jedna zanimljivost kod prekida petlje u Pythonu je što petlja \mintinline{python}{for} podržava i komponentu \mintinline{python}{else} koja se izvršava samo ako petlja nije prekinuta s naredbom \mintinline{python}{break}. Ova mogućnost je često korisna prilikom pretraživanja. Pogledajmo primjer koji provjerava da li se u nekom tekstu nalazi traženo slovo:
+
+\pythonfile{\emph{for}, \emph{break} i \emph{else}}{listing:for_else}{code_python_osnove/loops/for_else.py}
+
+
+\begin{pythonp}{\ref{listing:for_else} kada je slovo pronađeno}
+Unesi neki tekst: riba ribi grize rep
+Unesi slovo koje se traži: a
+Slovo "a" JE pronađeno!
+\end{pythonp}
+
+
+\begin{pythonp}{\ref{listing:for_else} kada slovo nije pronađeno}
+Unesi neki tekst: riba ribi grize rep
+Unesi slovo koje se traži: x
+Slovo "x" NIJE pronađeno!
+\end{pythonp}
+
+Za vježbu pokušajte izvesti prijašnji program bez da koristite komponentu \mintinline{python}{else} petlje \mintinline{python}{for}!
+
+
+\subsubsection{Preskoči korak u petlji}
+
+Jednostavna izjava \mintinline{python}{continue} čim se izvrši prelazi na idući korak petlje u kojoj se nalazi. Ova izjava se koristi kada je potrebno preskočiti korak u petlji.
+
+\pythonfile{Preskakanje koraka u petlji "za svaki"}{listing:for_continue}{code_python_osnove/loops/for_continue.py}
+
+
+\begin{pythonp}{\ref{listing:for_continue}}
+n
+k
+t
+k
+s
+t
+\end{pythonp}
+
+Na prikazani način možemo izvršiti petlju koja se izvršava za određen broj slučajeva, ali se preskaču slučajevi koji (ne) zadovoljavaju određene uvjete.
+
+Pogledajmo još pobliže u pogreške i upravljanje njima pa se možemo baciti i na konkretnije programe.
+
+\subsection{Pogreške i pokušaji}
+
+Javljanje pogrešaka je normalna stvar u programiranju, a kod programskih jezika viših razina se pokušava čim jasnije korisniku dati do znanja što je i gdje je pošlo po krivu. Python omogućava i presretanje pogrešaka što nam pruža nove mogućnosti za kontrolu toka programa. Pogledajmo prvo pobliže Python pogreške, a zatim i kako ih presretati.
+
+Što se dogodi kad Python prilikom izvršavanja kôda naiđe na pogrešku? Recimo da smo pokušali izvršiti izraz \mintinline{python}{n + 1}, a varijabli \mintinline{python}{n} nije pridružena vrijednost.
+
+\begin{python}{Kako Python javlja pogreške?}{listing:pogreska_1}
+>>> n + 1
+Traceback (most recent call last):
+    File "<pyshell#0>", line 1, in <module>
+        n + 1
+NameError: name 'n' is not defined
+\end{python}
+
+Usredotočimo se na zadnju liniju. Python javlja \mintinline{python}{NameError} s \mintinline{python}{name 'n' is not defined} kao detaljima pogreške. U trenutku kad je naišao na pogrešku Python je stvorio objekt vrste \mintinline{python}{Exception} (u ovom slučaju \mintinline{python}{NameError}) s nekom porukom. Zatim je prijavio grešku opisanu tim objektom korisniku te prekinuo izvršavanje. Sve linije prije zadnje su ispis koda u kojemu se dogodila greška. Ovaj dio može biti vrlo dugačak, ali važno je zapamtiti da nam je za opis greške najvažnija zadnja linija i u mnogim slučajevima je dovoljno pročitati samo nju uz informacije u kojoj se točno liniji kôda javlja pogreška. Ispis ranijeg kôda služi lakšem pronalaženju greške u vlastitom ili tuđem kôdu i posebno je koristan kod većih programa.
+
+Također, postoji više vrsta grešaka koje je najlakše pronaći u interaktivnom radu:
+
+\begin{python}{Primjer TypeError pogreške}{listing:pogreska_2}
+>>> 1 + '1'
+Traceback (most recent call last):
+    File "<pyshell#0>", line 1, in <module>
+        1 + '1'
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+\end{python}
+
+Dapače, ukoliko prilikom učenja Pythona ne vidite često kojekakve pogreške, šanse su da trebate promijeniti pristup! Upravo prikazana greška pojednostavljeno kaže "Greška u vrsti podataka: brojevi i tekst se ne mogu zbrajati".
+
+Najčešće pogreške koje Python javlja su:
+
+\begin{itemize}
+    \item \textbf{SyntaxError} - javlja se kada kôd nije dobro formiran; najčešće pogreške ovog tipa su neujednačene zagrade ili navodnici, manjak zareza ili dvotočki na mjestima na kojima se moraju pojavljivati i slično
+
+    \item \textbf{NameError} - javlja se kada koristimo neki naziv čija vrijednost nije poznata; na primjer pokušavamo koristiti varijablu \mintinline{python}{x} prije no što smo toj varijabli pridružili neku vrijednost
+
+    \item \textbf{TypeError} - javlja se kada se operacija ili funkcija pokuša provesti s krivom vrstom vrijednosti; na primjer \mintinline{python}{"1" + 1} ili \mintinline{python}{round("tekst")}
+
+    \item \textbf{ValueError} - javlja se kada se operacija ili funkcija pokuša provesti s točnom vrstom vrijednosti, ali s vrijednosti s kojom nije moguće provesti tu operaciju ili funkciju; na primjer \mintinline{python}{math.sqrt(-1)}
+
+    \item \textbf{ImportError} - javlja se kada korisnik pokuša uvesti modul koji ne postoji (ili ga Python ne zna pronaći, što dođe na isto); na primjer \textbf{import nisamtu} (pod uvjetom da niste sami napisali Python modul koji se zove "nisamtu")
+
+    \item \textbf{IndexError} - javlja se kada pokušamo dohvatiti element popisa koji nije prisutan; na primjer osmi znak iz stringa koji se sastoji od sedam znakova
+
+    \item \textbf{KeyError} - javlja se kada pokušamo dohvatiti element rječnika koji nije prisutan; na primjer element pod nazivom "title" iz rječnika koji ne sadrži takav ključ\footnote{Rječnici su prikazani kasnije u tekstu.}
+\end{itemize}
+
+
+Kroz iskustvo rada u Pythonu, postaje sve lakše identificirati probleme kroz vrste pogreški koje Python javlja. Uz to, kroz presretanje pogrešaka možemo upravljati pogreškama u programiranju što je katkad korisno. Ipak, dok su kondicionali i petlje standardan i prihvaćen dio kontrole toka u programskim jezicima, presretanje pogrešaka nije do te mjere. Ipak, može biti vrlo korisno i to pogotovo u slučaju kada želimo presresti korisničke greške kako bi mu javili jasnije poruke i spriječili "rušenje" programa. Na primjer, sljedeći program računa i ispisuje drugi korijen iz unesenog broja.
+
+\pythonfile{Jednostavan program koji ne trpi krivi unos}{listing:pogreske_input_raw}{code_python_osnove/try/sqrt_no_try.py}
+
+Kada pokrenemo program i upišemo broj "2", program će ispisati:
+
+\begin{pythonp}{\ref{listing:pogreske_input_raw}}
+Program je započeo s radom.
+
+Unesi broj: 9
+Drugi korijen:  3.0
+
+Pritisni <enter> za kraj
+\end{pythonp}
+
+%TODO provjeri da je objašnjeno kako vidjeti greške ranije! što se dešava ako se dogodi greška prije no što se program završi kod prvih primjera
+
+Prikazani program jednostavno računa drugi korijen iz korisničkog unosa. Ali što ako korisnik unese nešto što se ne može interpretirati kao broj ili unese negativan broj? Evo kako bi izgledao loš unos kada bismo ovaj program pokrenuli u IDLE-u ili u komandnoj liniji.
+
+\begin{pythonp}{\ref{listing:pogreske_input_raw}}
+Program je započeo s radom.
+
+Unesi broj: neću
+
+Traceback (most recent call last):
+    File "C:/code/try_except_a.py", line 7, in <module>
+        broj = int(broj)
+ValueError: invalid literal for int() with base 10: 'neću'
+\end{pythonp}
+
+U prikazanom slučaju vidimo "sirovu" grešku koju je javio Python. Međutim, da smo ovaj program pokrenuli duplim klikom, program bi jednostavno završio prije no što korisnik može pročitati poruku o grešci! Iz korisniče perspektive "program se srušio". U svakom slučaju, što želimo postići je: 1) da korisnik uvijek vidi grešku koja se dogodila i 2) da se korisniku ne prikazuje sirova greška kako ju javlja programski jezik, već neka poruka specifično namijenjena za naš program. Kako bismo postigli ovo, Python nam omogućuje korištenje riječi \mintinline{python}{try}. Pogledajmo primjer:
+
+\pythonfile{Jednostavan program s presretanjem korisničkih grešaka}{listing:pogreske_input_try}{code_python_osnove/try/sqrt_try.py}
+
+Kada izvršimo program vidjet ćemo da se on ne gasi "sam od sebe" prilikom pogreške, a povratna informacija korisniku nije više interna poruka od programskog jezika već nešto dizajnirano za ovu specifičnu namjenu.
+
+\begin{pythonp}{\ref{listing:pogreske_input_try}}
+Program je započeo s radom.
+
+Unesi broj: neću
+Iz vrijednosti "neću" nije moguće izračunati drugi korijen.
+
+Pritisni <enter> za kraj
+\end{pythonp}
+
+Slično se ponaša i kada unesemo negativan broj.
+
+\begin{pythonp}{\ref{listing:pogreske_input_try}}
+Program je započeo s radom.
+
+Unesi broj: -1
+Iz vrijednosti "-1" nije moguće izračunati drugi korijen.
+
+Pritisni <enter> za kraj
+\end{pythonp}
+
+Ovaj primjer demonstrira korištenje naredbe \mintinline{python}{try} u praksi. Najjednostavnije korištenje ove naredbe može se sažeti na sljedeći način:
+
+\begin{pythonp}{Najjednostavniji oblik pokušaja}{listing:pokusaj_1}
+try:
+    <naredbe koje će se pokušati izvršiti>
+except VrstaGreške:
+    <ako se dogodi bilo kakva greška u kôdu napisanom pod try,
+    izvršiti će se kôd napisan ovdje>
+\end{pythonp}
+
+\mintinline{python}{except} dio može i ne mora primiti neku vrstu pogreške (poput ValueError). Ako ne napišemo niti jednu vrstu pogreške tada će se kôd pod \mintinline{python}{except} izvršiti u slučaju bilo koje greške. Ako pak specificiramo neku vrstu greške, kao u primjeru \ref{listing:pogreske_input_try}, tada će se kôd napisan pod \mintinline{python}{except} izvršiti samo u slučaju te vrste greške. Ne specificirati vrstu greške je dopušteno, ali se u načelu smatra lošom praksom jer na taj način naredba \mintinline{python}{try} može "sakriti" greške za koje nismo pretpostavili da se mogu dogoditi što znatno otežava traženje problema u programima. Zato je dijelu \mintinline{python}{except} dobro specificirati točno koje vrste pogreške hvata. Ako želimo hvatati više vrsta pogrešaka, možemo ponoviti \mintinline{python}{except} komponentu naredbe \mintinline{python}{try}. Kao što smo vidjeli, ovoj naredbi je moguće dodati i \mintinline{python}{else} komponentu koja služi odvajanju kôda koji će se izvršiti samo ako su naredbe u \mintinline{python}{try} komponenti uspješno provedene, odnosno suprotan slučaj od onog u kojem se izvršava \mintinline{python}{except} dio kôda. Zadnja komponenta naredbe \mintinline{python}{try} je komponenta \mintinline{python}{finally}. Naredbe napisane u ovom dijelu će se uvijek izvršiti bez obzira da li je kôd pod \mintinline{python}{try} prouzročio grešku ili ne.
+
+\begin{pythonp}{Širi oblik pokušaja}{listing:pokusaj_2}
+try:
+    <naredbe koje će se pokušati izvršiti>
+except VrstaGreške1:
+    <ako se dogodi greška vrste VrstaGreške1 u kôdu napisanom pod try,
+     izvršiti će se kôd napisan ovdje>
+...
+except VrstaGreške2:
+    <ako se dogodi greška vrste VrstaGreške2 u kôdu napisanom pod try,
+     izvršiti će se kôd napisan ovdje>
+else:
+    <naredbe koje se izvršavaju samo ako je kôd napisan pod try uspješno izvršen>
+finally:
+    <naredbe koje se uvijek izvršavaju, bez obzira da li je došlo do greške ili ne>
+\end{pythonp}
+
+Ipak, potpuno raspisanu \mintinline{python}{try} naredbu se rijetko vidi i dapače, primjer koji prikazuje sve ove komponente u praksi bi bio ili vrlo specijaliziran ili umjetno osmišljen samo kako bi postojao takav primjer. Također, neke situacije u kojima se tipično koristila komponenta \mintinline{python}{finally} je Python 3 riješio na bolji način. U daleko najčešćem slučaju, naredba \mintinline{python}{try} će koristiti samo jednu \mintinline{python}{except} komponentu i potencijalno \mintinline{python}{else} komponentu kao u primjeru \ref{listing:pogreske_input_try}.
+
+Kao što vidimo, složena izjava \mintinline{python}{try} ima dosta naprednih mogućnosti. Ipak, ovaj mehanizam se koristi znatno manje nego kondicionali i petlje. Dapače, ukoliko je nešto moguće izvesti s izjavom \mintinline{python}{try}, ali i s kondicionalima i/ili petljama, kao općenito pravilo se izbjegava \mintinline{python}{try} jer za razliku od kondicionala i petlja ima više sitnica na koje treba paziti i detalja koji mogu poći po krivu.
+
+\subsection{Korištenje više mehanizama kontrole toka}
+
+Proučimo sljedeći jednostavan primjer:
+
+
+\pythonfile{Unos broja bez kontrole}{listing:input_number_no_try}{code_python_osnove/try/input_number_no_try.py}
+
+
+Iako korisniku javljamo \mintinline{python}{'Unesi broj: '}, ništa ga ne sprječava da unese tekst ili bilo što drugo što se ne može interpretirati kao broj. Česta greška na hrvatskim tipkovnicama je, na primjer, unos "7ž" gdje je slovo "ž" slučajno utipkano radi smještaja uz tipku enter, a na nekim tipkovnicama čak i zauzima dio te tipke. Ako se ovo dogodi, program će se srušiti jer će redak \mintinline{python}{n = int(n)} javiti grešku i komandna linija će se odmah ugasiti. Kako bismo spriječili takvo ponašanje i korisniku javili grešku možemo koristiti izjavu \mintinline{python}{try}.
+
+
+\pythonfile{Unos broja s prestretanjem pogreške}{listing:input_number_try}{code_python_osnove/try/input_number_try.py}
+
+
+Sada smo presreli pogrešku i prikazali korisniku odgovarajuću poruku. Ipak, nakon pogreške moramo prekinuti izvršavati program jer bi hipotetski ostatak programa očekivao da je n broj. Kako bismo ovo spojili s petljom \mintinline{python}{while} da korisniku ponavljamo pitanje sve dok ne unese cijeli broj?
+
+
+\pythonfile{Unos broja s prestretanjem pogreške i ponavljanjem unosa}{listing:input_number_try_while}{code_python_osnove/try/input_number_try_while.py}
+
+\begin{pythonp}{\ref{listing:input_number_try_while}}
+Unesi broj: neću
+neću se ne može interpretirati kao cijeli broj, pokušaj ponovo.
+Unesi broj: 17ž
+17ž se ne može interpretirati kao cijeli broj, pokušaj ponovo.
+Unesi broj: 17
+\end{pythonp}
+
+Prikazani mehanizam možemo koristiti kada želimo osigurati unos cijelog broja i ponavljati pitanje korisniku sve dok ne unese validan broj. Sada znamo dovoljno o mehanizmima kontrole toka kako bismo ih iskoristili u konkretnijim primjerima.
+
+% TODO except ... as ... ?

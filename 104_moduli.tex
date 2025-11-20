@@ -1,0 +1,138 @@
+\section{Moduli: Proširenja mogućnosti}\label{moduli}
+
+Programski jezici tipično u svojoj osnovnoj specifikaciji definiraju samo osnovne mogućnosti i vrste vrijednosti. Specifičnije radnje (poput kopiranja datoteka, trigonometrijskih ili statističkih izračuna ili slanja elektroničke pošte), vrste vrijednosti (poput datuma ili putanje na disku) i konstante (poput broja $pi$) se ne nalaze u osnovnoj specifikaciji već u proširenjima jezika. Ova proširenja se vrlo često na engleskom zovu knjižnice (eng. \textit{libraries}), a u Pythonu se zovu moduli (eng. \textit{modules}).
+
+Python modul\index{modul}, dakle, unosi dodatne mogućnosti u jezik. To je ranije napisan kôd čije elemente možemo ponovno koristiti u novim programima. U računalnom slengu, modul možemo shvatiti kao \textit{plug-in}. Već smo upoznali jedan takav modul: \mintinline{python}{math}. Kako bi mogli početi koristiti modul, potrebno ga je "uvesti" u vlastiti kôd.
+
+\begin{python}{Korištenje modula pomoću naredbe import}{listing:moduli_import}
+import math
+print(math.sqrt(2))
+print(math.pi)
+\end{python}
+
+Rezultat koda gore je ispis korijena iz dva i pi konstante, ali to nije zašto ga ovdje prikazujemo. Linija \mintinline{python}{import math} govori Pythonu da uveze modul\index{modul!uvoz} \mintinline{python}{math} koji je ostatku koda u toj datoteci dostupan kroz ime \mintinline{python}{math} i to ime se ponaša kao varijabla. Svi članovi tog modula (funkcije, vrste vrijednosti i konstante) dostupni su pisanjem nakon točke. Kao i kod metoda, točka označava članstvo odnosno članove modula koristimo pisanjem točke nakon imena modula kao gore u linijama \mintinline{python}{math.sqrt(2)} i \mintinline{python}{math.pi}.
+
+Dvije stvari su nam ovdje važne. Prva je da se kod uvoza modula događa slična stvar kao i u pridruživanju vrijednosti varijabli: neko ime se "rezervira" za određenu upotrebu. Pogledajmo primjer:
+
+\begin{python}{Moduli i imena varijabli}{listing:moduli_imena}
+>>> math = 'moja matematika'  # definiraj varijablu imenovanu "math"
+>>> print(math)
+moja matematika
+>>> import math  # redefiniraj math da se referira na modul
+>>> print(math)
+<module 'math' (built-in)>
+>>> print(math.pi)
+3.141592653589793
+>>> math = 'moja matematika'  # redefiniraj math da se referira na tekst
+>>> print(math.pi)  # javlja grešku jer objekt vrste string nema član imenovan "pi"
+Traceback (most recent call last):
+  File "<pyshell#11>", line 1, in <module>
+    print(math.pi)
+AttributeError: 'str' object has no attribute 'pi'
+\end{python}
+
+Riječ "math", naravno, nema posebno značenje u Pythonu pored toga što je naziv standardnog modula i smije se koristiti proizvoljno. Kada ne koristimo modul math, ovo nije problem. Ukoliko prikazano jest problem, jer imamo vlastitu varijablu koju želimo zvati isto kao i neki modul koji želimo koristiti, najbolje je promijeniti ime varijable, ali postoji i mogućnost promjene naziva modula prilikom uvoza:
+
+\begin{python}{Korištenje modula pod drugim imenom}{listing:moduli_as}
+# nakon riječi "as" pišemo ime pod kojim želimo da se modul uveze
+>>> import math as matematika
+>>> math = 'moja matematika'
+>>> print(math)
+moja matematika
+>>> print(matematika.pi)
+3.141592653589793
+>>> print(math.pi)
+Traceback (most recent call last):
+    File "<pyshell#75>", line 1, in <module>
+        print(math.pi)
+AttributeError: 'str' object has no attribute 'pi'
+\end{python}
+
+Također, Python dozvoljava i uvoz samo jednog člana nekog modula.
+
+\begin{python}{Uvoz jednog člana modula}{listing:moduli_from}
+>>> from math import pi
+>>> print(pi)
+3.141592653589793
+>>> pi = 100
+>>> print(pi)
+100
+\end{python}
+
+Na ovaj način, ne uvozimo ime \mintinline{python}{math} već direktno ime \mintinline{python}{pi}. To znači da nam ime \mintinline{python}{math} u ostatku koda nije relevantno, ali ako redefiniramo varijablu \mintinline{python}{pi}, izgubiti ćemo vrijednost koju smo uvezli iz modula \mintinline{python}{math}. Ovaj način uvoza je koristan kada želimo koristiti samo jedan ili mali broj članova nekog modula jer možemo koristiti naziv člana modula direktno (na primjer \mintinline{python}{pi}) radije nego u obliku \mintinline{python}{math.pi} (na primjer \mintinline{python}{math.pi}). Kao i kod uvoza cijelih modula, članove možemo preimenovati koristeći se riječi \mintinline{python}{as}.
+
+\begin{python}{Uvoz jednog člana modula s preimenovanjem}{listing:moduli_from_as}
+>>> from math import pi as x
+>>> print(x)
+3.141592653589793
+\end{python}
+
+\subsection{Standardna knjižnica}
+
+Kako to da smo nakon osnovne instalacije Pythona mogli jednostavno napisati \mintinline{python}{import math} i modul \mintinline{python}{math} je dostupan? Kao što smo već u uvodu spomenuli, jedna od odluka Pythona je da su \textquotedblleft baterije uključene\textquotedblleft{}. To znači da Python dolazi s velikim brojem modula koji su uključeni u instalaciju Pythona. Te module zajednički nazivamo \textquotedblleft standardnom knjižnicom\textquotedblleft{} i ona dolazi s velikim brojem modula koji proširuju Python s kojekakvim mogućnostima. Popisu modula i dokumentaciji možete pristupiti \href{https://docs.python.org/3/library/index.html}{ovdje}.
+
+S mnogim korisnim modulima ćemo se upoznati kroz tekst, a nabrajati ih sve ovdje ne bi bilo svrsishodno jer u standardnoj knjižnici postoji velik broj modula. Slijedi odabir često korisnih modula kako bi dobili dojam o čemu se radi i informirali se o mogućnostima koje su dostupne kroz standardnu instalaciju Pythona:
+
+\begin{itemize}
+    
+    \item \textbf{rad s tekstom}
+    \begin{itemize}
+        \item \mintinline{python}{string} - znakovi definirani prema ASCII standardu i dodatne radnje s tekstom
+        \item \mintinline{python}{unicodedata} - UNICODE šifrarnik za kodiranje teksta
+        \item \mintinline{python}{re} - regularni izrazi
+    \end{itemize}
+
+    \item \textbf{rad s brojevima}
+    \begin{itemize}
+        \item \mintinline{python}{math} - dodatne matematičke funkcije i konstante
+        \item \mintinline{python}{statistics} - dodatne statističke funkcije
+        \item \mintinline{python}{random} - generacija slučajnih brojeva
+    \end{itemize}
+
+    \item \textbf{rad s vremenom}
+    \begin{itemize}
+        \item \mintinline{python}{time} - očitanje vremena        
+        \item \mintinline{python}{datetime} - vrste vrijednosti za datume kao i sate, minute ...
+%        \item \mintinline{python}{collections} - dodatne strukture podataka
+    \end{itemize}
+
+    \item \textbf{rad s putanjama i datotekama}
+    \begin{itemize}
+        \item \mintinline{python}{pathlib} - vrsta vrijednosti za putanje na disku
+        \item \mintinline{python}{shutil} - radnje s datotekama, kao što su kopiranje, preimenovanje i brisanje
+    \end{itemize}
+
+    \item \textbf{rad s podatkovnim datotekama}
+    \begin{itemize}
+        \item \mintinline{python}{csv} - čitanje i pisanje razgraničenog teksta
+        \item \mintinline{python}{json} - čitanje i pisanje JSON datoteka
+    \end{itemize}
+
+    \item \textbf{rad s internetom i webom}
+    \begin{itemize}
+        \item \mintinline{python}{email, smtplib, imaplib} - elektronička pošta
+        \item \mintinline{python}{html, xml} - rad s HTML-om i XML-om
+        \item \mintinline{python}{urllib} - rad s URL-ovima, uključujući i dohvat podataka s weba
+    \end{itemize}
+
+    \item \textbf{zapisivanje i komprimiranje podataka}
+    \begin{itemize}
+        \item \mintinline{python}{pickle} - zapisivanje Python objekata na disk i usnimavanje istih
+        \item \mintinline{python}{sqlite3} - stvaranje SQLite relacijskih baza podataka
+        \item \mintinline{python}{zipfile} - rad sa zip komprimiranim datotekama
+    \end{itemize}
+
+\end{itemize}
+
+
+Sa spomenutim modulima smo tek zagrebli površinu standardne knjižnice. Ipak, prikazali smo mnoge korisne module, a velik dio standardne knjižnice ima veze temama koje su nam za sada prenapredne, kao što su to funkcijsko programiranje, testiranje, profiliranje i debagiranje kôda, asinkrono i višeprocesorsko programiranje i tako dalje. Stoga ćemo se za sada zaustaviti s prikazom standardne knjižnice, a kroz ovaj tekst ćemo se upoznati s mnogim modulima u praksi.
+
+
+
+\subsection{Instalacija dodatnih modula}
+
+Python, dakle, dolazi s mnogim zanimljivim mogućnostima sam po sebi, ali što ako nam treba više? Što ukoliko želimo zapisati .pdf, .docx ili .xlsx datoteku, crtati rasterske ili vektorske slike, raditi napredne znanstvene analize ili pak isprogramirati aplikaciju s grafičkim sučeljem ili video igru?
+
+Pored standardne knjižnice za Python postoji izuzetno velik broj modula koje razvijaju korisnici. Mnogi od ovih modula su veliki i kvalitetni projekti koji se već dugo razvijaju i koji se često koriste u znanosti i industriji. Katalog dodatnih modula je dostupan kroz \href{https://pypi.org/}{Python Package Index} (odnosno PyPi) i sadrži preko 200 000 modula.
+
+%TODO pip

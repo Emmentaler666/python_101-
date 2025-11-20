@@ -1,0 +1,351 @@
+
+% TODO Zapis, podatkovna jedinica .... atribut, svojstvo, polje
+
+\section{Uvod u programiranje s podacima}
+
+Strukture podataka su sastavan dio programiranja bez kojih nije moguće zamisliti mnoge algoritme. Između ostalog, strukture podataka omogućuju rad s podacima za potrebe analitike ili upravljanja. Dapače, jedna od popularnijih namjena Pythona je upravo rad s podacima poput onih iz baza podataka ili dohvaćenih kroz sučelja za razmjenu podataka.
+
+U nastavku teksta slijede prvi koraci u razumijevanju obrade podataka u odnosu na ranije opisane strukture, odnosno prvi koraci za korištenje popisa (\lstinline{list}, \lstinline{tuple}) i rječnika (\lstinline{dict}) za potrebe obrade podataka. Spomenute strukture, uz bogate mogućnosti rada s tekstom te ostale značajke Pythona, nam pružaju vrlo kvalitetnu platformu za rad s podacima bilo koje vrste. Za razliku od specijaliziranih rješenja, lako se prilagoditi kojekakvim specifičnostima podatkovnih zapisa s kojima radimo te osmišljati rješenja za neočekivane probleme. Također, u nekim slučajevima je vrlo korisno odraditi pripremu podataka u Pythonu (na primjer dohvat i potrebne transformacije), a zatim podatke prebaciti u specijaliziraniji statistički softver u kojem je lakše provesti kompleksnije analitičke postupke.
+
+Prilikom analitičkog rada s podacima, često se koriste dodatni Python moduli koji donose nove strukture i mogućnosti (popularni su npr. Numpy i Pandas). Ipak, za razumijevanje rada sa strukturiranim podacima, vrlo je korisno osnovne koncepte usvojiti kroz jednostavne vrste vrijednosti i strukture podataka pa tek zatim krenuti koristiti strukture fokusirane na efikasnost ili gotova specijalizirana rješenja.
+
+Prije no što krenemo u samo programiranje, pogledajmo neke strukturirane podatke. Najčešća struktura s kojom se srećemo i koja nije striktno vezana za računala je tablica. Pogledajmo pojednostavljen primjer bibliografskih metapodataka u tabličnom obliku.
+
+\begin{table}[H]
+    \centering
+    \caption{Primjer jednostavne tablice}
+    \label{table:primjer}
+    \begin{tabular} { l l l l l }
+        \hline
+        \textbf{Naslov} & \textbf{Autor} & \textbf{Godina} & \textbf{Izdavač} & \textbf{ISBN} \\
+        \hline
+        Good Omens & Terry Pratchett \& Neil Gaiman & 1990 & Gollancz & 0-575-04800-X \\
+        Interesting times & Terry Pratchett & 1994 & Gollancz & 0-575-05800-5 \\
+        Neverwhere & Neil Gaiman & 1996 & BBC Books & 0-7472-6668-9 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Započnimo jednostavnim pitanjem: "Kako postaviti tablične podatke u oblik iskoristiv za programiranje?".
+
+Rješenju možemo, naravno, pristupiti na više načina, a razumijevanje mogućih rješenja i transformacija među njima je najvažniji početni korak u radu sa strukturiranim podacima u Pythonu. Ovakav pristup nam pomaže usvojiti strukture podataka za reprezentaciju samih podataka, a zatim i kako se koristiti tim istim strukturama za potrebu transformiracije, odabira i grupiranja podataka.
+
+
+\subsection{Tablica kao popis popisa}
+
+Prikazana tablica se sastoji od tri podatkovne jedinice (ovdje vrste "knjiga") svaka od kojih je opisana s pet svojstava (naslov, autor, godina, izdavač, ISBN) svako od kojih prima vrijednost. Sve vrijednosti su u ovom početnom slučaju jednostavne, odnosno nemaju internu strukturu\footnote{Pored toga što sam tekst već možemo shvatiti kao strukturu, odnosno niz znakova.}. U prijašnjim rečenicama se namjerno ne koriste izrazi "redak" i "stupac". Navedeno predstavlja općenito viđenje podataka koje želimo postići ovom skriptom te povezati s programskim konceptima. Ipak, krenimo prvo s poznatim konceptima svojstvenima tablici, a razlog općenitijoj terminologiji gore će postati vidljiv kroz primjere odnosno strukture podataka koje ćemo koristiti za kodifikaciju informacija na različitim razinama.
+
+Razmislimo o izjavi "U prikazanoj tablici svaki redak je knjiga, a autori se nalaze u drugom stupcu". Jedan način na koji možemo definirati tablicu je popis redaka\footnote{Svaki redak je jedna "podatkovna jedinica" odnosno "instanca entiteta".}. Redak možemo definirati kao popis vrijednosti u dogovorenom redoslijedu koji je zadan naslovima stupaca\footnote{Svaki stupac označava svojstvo.}. Kako bi znali koja vrijednost se nalazi u kojem stupcu potrebno nam je "zaglavlje" tablice odnosno popis naziva stupaca. Kad nam je definirano zaglavlje, na isti način možemo definirati i neki redak u tablici.
+
+Pogledajmo primjer:
+
+\begin{lstlisting}[caption={Zaglavlje i podatkovni redak kao popisi}, label={listing:popis_redak}]
+zaglavlje = ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+redak = ['Interesting times',  'Terry Pratchett',  1994, 'Gollancz', '0-575-05800-5']
+\end{lstlisting}
+
+Tablica nam je onda jednostavno popis redaka:
+
+\begin{lstlisting}[caption={Zaglavlje i tablica kao popisi}, label={listing:popis_tablica}]
+zaglavlje = ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+tablica = [
+    ['Good Omens',  'Terry Pratchett & Neil Gaiman',  1990, 'Gollancz', '0-575-04800-X'],
+    ['Interesting times',  'Terry Pratchett',  1994, 'Gollancz', '0-575-05800-5'],
+    ['Neverwhere',  'Neil Gaiman',  1996, 'BBC Books', '0-7472-6668-9']
+]
+\end{lstlisting}
+
+Na ovaj način možemo početi raditi s ovim podacima. Ova struktura nam već, na primjer, dopušta odgovor na jednostavna pitanja poput "Koliko ima knjiga u našim podacima?" s izrazom \lstinline{len(tablica)}. Ovo je dobar trenutak i da se zapitamo zašto zaglavlje držimo izdvojeno. Mogli smo ga uključiti kao što je uobičajeno u raznom softveru kao "prvi redak u tablici":
+
+\begin{lstlisting}[caption={Tablica koja sadrži zaglavlje}, label={listing:popis_tablica_zaglavlje}] 
+tablica = [
+    ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+    ['Good Omens',  'Terry Pratchett & Neil Gaiman',  1990, 'Gollancz', '0-575-04800-X'],
+    ['Interesting times',  'Terry Pratchett',  1994, 'Gollancz', '0-575-05800-5'],
+    ['Neverwhere',  'Neil Gaiman',  1996, 'BBC Books', '0-7472-6668-9']
+]
+\end{lstlisting}
+
+
+Ipak, ovakav pristup je problematičan. Uključili smo zaglavlje, odnosno dio sheme podataka, u same podatke! Zaglavlje ne predstavlja "jednu knjigu". Kada razmislimo o tome što sada znači rezultat izraza \lstinline{len(tablica)} greška postaje očita. Drugim riječima, valja jasno odvajati "shemu podataka" ili "metapodatke" od samih "podataka o nečemu" jer ćemo tako imati znantno manje problema u kasnijoj obradi i pohrani ovakvih podataka.
+
+Kako funkcionira adresiranje u ovakvoj strukturi? Jednostavno, indeks u glavnom popisu ("tablici") je broj retka, a indeks u svakom pod-popisu ("retku") je broj stupca. Pročitajmo, na primjer, drugi redak i vrijednost svojstva "Godina" tog retka.
+
+
+\begin{lstlisting}[caption={Dohvat vrijednosti iz popisa popisa}, label={listing:tablica_dohvat}]
+drugi_redak = tablica[1]  # prvi redak je na indeksu 0!
+godina = drugi_redak[2]   # treći stupac
+
+# ili jednostavno
+godina = tablica[1][2]
+# odnosno dohvati element na indeksu 1 i zatim dohvati element na 
+# indeksu 2 u dohvaćenom elementu
+\end{lstlisting}
+
+Ako se prisjetimo nekih dodatnih radnji s popisima, sjetit ćemo se i da je moguće dohvatiti indeks neke poznate vrijednosti u popisu. Pogledajmo kako iskoristiti ovaj trik u kontekstu prikazanih struktura.
+
+\begin{lstlisting}[caption={Dohvat vrijednosti iz popisa popisa s razrješavanjem naziva}, label={listing:tablica_dohvat2}]
+# dohvati indeks za godinu putem indeksa naziva u zaglavlju
+i_godina = header.index('Godina')
+# dohvati element na indeksu 1 i zatim dohvati element na istom indeksu na kojem 
+# se nalazi 'Godina' u zaglavlju
+godina = tablica[1][i_godina]
+\end{lstlisting}
+
+% TODO PLACE PROPERLY Također vrlo je važno primijetiti da strukturiramo podatke na (barem) dvije razine. Jedno je razina individualne podatkovne jedinice, a druga zbirke tih podatkovnih jedinica odnosno "tablica".
+
+\subsection{Tablica kao rječnik popisa}
+
+Do sada smo, kao i u npr. Excelu, vrijednosti identificirali putem indeksa retka i indeksa stupca. Veliki problem s identifikacijom putem indeksa je to što su promjenjivi. Ako se, na primjer, referiramo na jedinicu u retku pod indeksom 5, ta jedinica će se promijeniti nakon sortiranja tablice! Drugim riječima, indeksi ne identificiraju jednoznačno neku jedinicu ili svojstvo, već trenutačnu poziciju te jedinice odnosno svojstva u odabranoj strukturi podataka. U tipičnim tablicama se redoslijed stupaca relativno rijetko mijenja pa su indeksi svojstava često stabilni, ali reci se često dodaju i sortiraju pa indeksi redaka nisu dobar identifikator individualnih zapisa.
+
+Što ako želimo tablicu strukturirati tako da retke, odnosno individulne zapise, možemo dohvaćati preko neke stabilne šifre? Iskoristimo za primjer polje ISBN i postavimo tablicu tako da je struktura koja čuva retke rječnik te u kojem su ključevi ISBN vrijednosti, a reci, isto što i prije, odnosno popis vrijednosti kod kojeg je redoslijed zadan zaglavljem.
+
+\begin{lstlisting}[caption={Tablica kao rječnik popisa}, label={listing:rjecnik_popisa}]
+zaglavlje = ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+tablica = {
+    '0-575-04800-X': ['Good Omens',  'Terry Pratchett & Neil Gaiman',  1990, 'Gollancz', '0-575-04800-X'],
+    '0-575-05800-5': ['Interesting times',  'Terry Pratchett',  1994, 'Gollancz', '0-575-05800-5'],
+    '0-7472-6668-9': ['Neverwhere',  'Neil Gaiman',  1996, 'BBC Books', '0-7472-6668-9']
+}
+\end{lstlisting}
+
+Individualna podatkovna jedinica nam je ostala identična kao i u prvoj strukturi tabličnih podataka (popis vrijednosti), ali struktura koja sabire podatkovne jedinice se promijenila kako bi omogućila direktno adresiranje putem nekog jedinstvenog identifikatora.
+
+Kako adresirati podatke u ovakvoj strukturi podataka možemo vidjeti u primjeru \ref{listing:rjecnik_popisa_dohvat}.
+
+\begin{lstlisting}[caption={Dohvat vrijednosti iz rječnika popisa}, label={listing:rjecnik_popisa_dohvat}]
+# dohvati redak pomoću ISBN-a
+redak_za_isbn = tablica['0-575-05800-5']  
+# dohvati treći "stupac"
+godina = redak_za_isbn[2] 
+
+# ili jednostavno
+godina = tablica['0-575-05800-5'][2] 
+\end{lstlisting}
+
+Što ako imamo podatke kao popis popisa, a želimo rječnik popisa? Upravo ćemo podatke zapakirane kao popis popisa često dobivati prilikom komunikacije s relacijskim bazama ili usnimavanja podataka izvezenih iz relacijskih baza ili softvera koji funkcionira na razini tablica poput Excela i SPSS-a. Proceduru za pretvaranje iz jedne strukturu u drugu možemo vidjeti u primjeru \ref{listing:pp_u_rp1}.
+
+
+\begin{lstlisting}[caption={Popis popisa -> rječnik popisa, zadrži šifru}, label={listing:pp_u_rp1}]
+zaglavlje = ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+tablica = [
+    ['Good Omens',  'Terry Pratchett & Neil Gaiman',  1990, 'Gollancz', '0-575-04800-X'],
+    ['Interesting times',  'Terry Pratchett',  1994, 'Gollancz', '0-575-05800-5'],
+    ['Neverwhere',  'Neil Gaiman',  1996, 'BBC Books', '0-7472-6668-9']
+]
+
+# napravi prazan rječnik u koji će se dodavati podaci
+tablica_rjecnik = {}
+
+for redak in tablica:
+    # dohvati vrijednost koju koristimo kao ključ
+    isbn = redak[4]
+    # postavi redak u tablica_rjecnik kao vrijednost
+    tablica_rjecnik[isbn] = redak
+
+godina = tablica_rjecnik['0-575-05800-5'][2] 
+\end{lstlisting}
+
+Što ako ne postoji vrijednost koja se može koristiti kao šifra u tablici? Najjednostavnija strategija izrade jedinstvene šifre je dodjelom tekućeg broja. Ova strategija je prikazana u primjeru \ref{listing:pp_u_rp2} :
+
+\begin{lstlisting}[caption={Popis popisa -> rječnik popisa, stvori šifru}, label={listing:pp_u_rp2}]
+# tablica je ista kao i u prošlom primjeru
+
+# napravi prazan rječnik u koji će se dodavati podaci
+tablica_rjecnik = {}
+# postavi šifru na neku početnu vrijednost
+sifra = 0
+
+for redak in tablica:
+    # povećaj šifru za jedan (čime svaki redak garantirano dobiva jedinstven broj za šifru)
+    sifra += 1
+    # postavi redak u tablica_rjecnik kao vrijednost
+    tablica_rjecnik[sifra] = redak
+    
+# pažnja: broj 1 u sljedećem izrazu izrazu nije indeks već šifra!
+godina = tablica_rjecnik[1][2] 
+\end{lstlisting}
+
+Ovako dodijeljene šifre inicijalno su jednake indeksima redaka u ulaznoj tablici, ali nisu osjetljive na promjene u sortiranju. Drugim riječima, imaju prednost da ako zapamtimo neki skup šifri poput \{3, 7\} kao, na primjer, rezultat pretrage, taj popis šifri je garantirano trajno validan jer identifikacija redaka ne ovisi o trenutačnom poretku tablice. Dapače, ako nam je tablica rječnik, redoslijed redaka jednostavno više ne postoji! \footnote{Naravno, uvijek ga možemo stvoriti po potrebi}.
+
+Također, vrijedi i dobro razmisliti koju vrijednost koristiti kao šifru. ISBN, na primjer, nam često ne zadovoljava potrebe za šifru jer jedno djelo može imati više ISBN identifikatora ovisno o digitalnoj ili papirnatoj inačici, tvrdom i mekom uvezu te ISBN 10 i 13 varijantama. Drugim riječima, može postojati takav ISBN broj koji mi ne koristimo kao ključ, a koji identificira knjigu "Neverwhere" u nekom njezinom obliku. Možda i želimo da jedan naš "redak" sadrži sve ISBN-ove koje se prema našim kriterijima odnose na isti entitet odnosno, u ovom slučaju, djelo. Ako je tako, tada bi također dodijelili svoje šifre kao u prijašnjem primjeru.
+
+\subsection{Tablica kao rječnik rječnika}
+
+U prošloj seriji primjera, riješili smo se redoslijeda redaka za potrebe identifikacije i dodijelili svoje šifre. Fokusirajmo se sada na redak. On nam je dosada bio popis vrijednosti, odnosno popis "stupaca". Svaki od ovih stupaca međutim, već ima svoje ime. Možemo li se unutar retka referencirati na vrijednosti putem naziva vrijednosti, a ne putem indeksa "stupca"? Dapače, vrijeme je da se odmaknemo od koncepta "stupca" i krenemo pričati o atributima, odnosno svojstvima.
+
+Postavimo redak kao rječnik u kojem su ključevi nazivi svojstava (i.e. "stupaca u tablici"), a vrijednosti u rječniku su upravo vrijednosti tih svojstava.
+
+\begin{lstlisting}[caption={Redak kao rječnik}, label={listing:redak_rjecnik}]
+redak = {
+   'Naslov': 'Interesting times', 
+   'Autor': 'Terry Pratchett',
+   'Godina': 1994,
+   'Izdavač': 'Gollancz',
+   'ISBN': '0-575-05800-5'
+}
+
+godina = redak['Godina']
+\end{lstlisting}
+
+"Tablica" ovakvih predmeta može biti bilo popis ovakvih rječnika ili rječnik ovakvih rječnika. Upravo nam je rječnik rječnika posebno korisna struktura. Recimo da smo sve retke postavili kao u primjeru gore i zatim ih postavili kao vrijednosti u rječnik gdje su ključevi ISBN identifikatori, tada bi godinu neke knjige mogli adresirati kao u sljedećem primjeru:
+
+\begin{lstlisting}[caption={Podaci kao rječnik rječnika}, label={listing:podaci_rjecnik}]
+tablica_rjecnik = {
+    '0-575-05800-5': {
+       'Naslov': 'Interesting times', 
+       'Autor': 'Terry Pratchett',
+       'Godina': 1994,
+       'Izdavač': 'Gollancz',
+       'ISBN': '0-575-05800-5'
+    },
+    # ... ostali reci ispušteni iz primjera
+}
+
+godina = tablica_rjecnik['0-575-05800-5']['Godina'] 
+\end{lstlisting}
+
+Kao što vidimo, u ovoj strukturi se na sve referiramo preko šifri odnosno naziva radije nego preko redoslijeda što je često prirodnije i manje podložno greškama. Ovaj oblik je također puno bliži načinu na koji se danas razmijenjuju podaci na webu, odnosno formatu JSON koji je nastao upravo kako bi ovakve strukture mogli razmijenjivati među sustavima.
+
+Naravno, čest je slučaj da podatke primamo u tabličnoj strukturi (na primjer, prilikom usnimavanja iz razgraničenog teksta ili pri dohvatu iz relacijskih baza podataka) pa ako želimo raditi s podacima u ovom obliku, moramo ih prvo restrukturirati. Pogledajmo prvo kako pretvoriti individualan popis vrijednosti u rječnik vrijednosti.
+
+\begin{lstlisting}[caption={Popis vrijednosti -> rječnik vrijednosti}, label={listing:popis_u_rjecnik}]
+# ulazni podaci
+zaglavlje = ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+redak = ['Good Omens',  'Terry Pratchett & Neil Gaiman',  1990, 'Gollancz', '0-575-04800-X']
+
+# izradi prazan rječnik koji ćemo popuniti ulaznim podacima
+redak_rjecnik = {}
+
+# zaglavlje i redak po definiciji imaju jednak broj vrijednosti
+# vrijednost na indeksu "i" u retku odgovara svojstvu na indeksu "i" u zaglavlju
+for i in range(len(header)):
+    naziv = zaglavlje[i]  # dohvati naziv
+    vrijednost = redak[i]  # dohvati vrijednost
+    redak_rjecnik[naziv]  = vrijednost  # postavi vrijednost pod specifičan naziv u rječnik
+\end{lstlisting}
+
+Kao što vidimo, ne trebaju nam nikakvi novi koncepti s kojima već nismo radili. U ovom istom primjeru mogli smo istim tim konceptima i preimenovati i/ili ispustiti neke atribute. Evo varijante koja ujedno i preimenuje atribute:
+
+
+\begin{lstlisting}[caption={Popis vrijednosti -> rječnik vrijednosti}, label={listing:popis_u_rjecnik}]
+# ulazni podaci
+zaglavlje = ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+redak = ['Good Omens',  'Terry Pratchett & Neil Gaiman',  1990, 'Gollancz', '0-575-04800-X']
+
+# rječnik preimenovanja atributa
+prevedi = {
+    'Naslov': 'title',
+    'Autor': 'author',
+    'Godina': 'year',
+    'Izdavač': 'publisher',
+    'ISBN': 'ISBN'  # ovdje nema promjene u nazivu 
+}
+
+# izradi prazan rječnik koji ćemo popuniti ulaznim podacima
+redak_rjecnik = {}  
+
+# zaglavlje i redak po definiciji imaju jednak broj vrijednosti
+# vrijednost na indeksu "i" u retku odgovara svojstvu na indeksu "i" u zaglavlju 
+for i in range(len(header)):
+    naziv = zaglavlje[i]    # dohvati naziv
+    naziv = prevedi[naziv]  # prevedi naziv
+    vrijednost = redak[i]   # dohvati vrijednost
+    redak_rjecnik[naziv]  = vrijednost  # postavi vrijednost pod specifičan naziv u rječnik
+\end{lstlisting}
+
+Pogledajmo sad kako ovo primijeniti na cijelu tablicu. Primjer niže jednostavno spaja primjere \ref{listing:pp_u_rp2} i \ref{listing:popis_u_rjecnik}.
+
+\begin{lstlisting}[caption={Popis popisa -> rječnik rječnika}, label={listing:pp_u_rr}]
+# ulazni podaci
+zaglavlje = ['Naslov', 'Autor', 'Godina', 'Izdavač', 'ISBN']
+tablica = [
+    ['Good Omens',  'Terry Pratchett & Neil Gaiman',  1990, 'Gollancz', '0-575-04800-X'],
+    ['Interesting times',  'Terry Pratchett',  1994, 'Gollancz', '0-575-05800-5'],
+    ['Neverwhere',  'Neil Gaiman',  1996, 'BBC Books', '0-7472-6668-9']
+]
+
+# rječnik preimenovanja atributa
+prevedi = {'Naslov': 'title', 'Autor': 'author', 'Godina': 'year', 
+'Izdavač': 'publisher', 'ISBN': 'ISBN'}
+
+# izradi prazan rječnik za sve podatke
+podaci = {}
+# postavi brojač za šifre na 0
+sifra = 0
+# zaglavlje i redak po definiciji imaju jednak broj vrijednosti
+# vrijednost na indeksu "i" u retku odgovara svojstvu na indeksu "i" u zaglavlju 
+for redak in tablica:
+    # izradi prazan rječnik koji ćemo popuniti ulaznim podacima
+    redak_rjecnik = {}  
+    for i in range(len(header)):
+        # postavi vrijednost pod prevedeni naziv u rječnik
+        prevedeni_naziv = prevedi[zaglavlje[i]]
+        redak_rjecnik[prevedeni_naziv] = redak[i] 
+    podaci[sifra] = redak_rjecnik
+    sifra += 1
+\end{lstlisting}
+
+Sada kada možemo raditi s podacima na ovoj razini, relativno je lako doraditi gore prikazan proces da, na primjer, ispušta neke atribute i/ili jedinice koje nas ne zanimaju ili pak priprema vrijednosti određenih atributa i slično.
+
+\subsection{Tablica vs. strukturirani podaci}
+
+Kako napredujemo mogućnostima u reprezentaciji tabličnih podataka, možemo vidjeti da se sve više udaljavamo od koncepta tablice. Ovo i želimo jer je struktura tablice često previše ograničavajuća, a i pomalo neprecizna. "Tablica" je koncept koji se koristi šire od strukture podataka, te je pitanje da li dopušta na primjer, koncepte poput "spojenih ćelija" ili ugniježdenih struktura (na primjer popis vrijednosti ili tablica kao vrijednost u "ćeliji").
+
+Usredotočimo se stoga na redak. Ako ne razmišljamo o tome što on predstavlja u kontekstu tablice već u kontekstu strukturiranih podataka, možemo ga nazvati podatkovna jedinica, entitet, zapis ili što slično. Naši podaci su skup tih jedinica, a jedinice dijele zajedničku strukturu.
+
+Vrijednosti nekih svojstava podatkovne jedinice također mogu biti strukture vrijednosti, što tu podatkovnu jedinicu čini sve manje nalik na redak u tablici. Promotrimo u našem primjeru vrijednosti za atribut "autor". "Terry Pratchett \& Neil Gaiman" nije neobična vrijednost budući da neko djelo može imati više autora. To nam samo po sebi već govori da je vrijednost atributa "autori" zapravo struktura vrijednosti i to popis autora (odnosno stringova).
+
+Pogledajmo kako postaviti naš bibliografski zapis za neku knjigu kako bi dopuštao koautorstvo.
+
+\begin{lstlisting}[caption={Ugniježđeni podaci 1}, label={listing:ugnj1}]
+zapis = {
+   'Naslov': 'Good Omens', 
+   'Autor': ['Terry Pratchett', 'Neil Gaiman'],  # atribut Autor sad dopušta više vrijednosti!
+   'Godina': 1990,
+   'Izdavač': 'Gollancz',
+   'ISBN': '0-575-05800-5'
+}
+# funkcija len sad računa broj imena autora, a ne broj slova u polju autori
+broj_autora = len(zapis['Autor'])
+# također, možemo dohvatiti npr. prvog autora
+prvi_autor = zapis['Autor'][0]
+\end{lstlisting}
+
+Jednostavno rečeno, ako postavimo atribut "Autor" da može primati više vrijednosti, tada u podacima dopuštamo koautorstvo i omogućavamo odgovore na pitanja poput "Koliko autora je potpisano na neku publikaciju?" i "Na koliko je publikacija neki autor potpisan?". Također, individualna podatkovna jedinica nam sada ima ugniježđene strukture (vrijednosti nekih svojstava su strukture vrijednosti, a ne jedinične vrijednost) pa se više ne može zapisati kao redak u tablicu!\footnote{Strukturu podataka možemo zapisati kao \textbf{text} u ćeliju, ali ne možemo adresirati unutar tog teksta, što poražava svrhu. Također, neke relacijske baze poput PostgreSQLa od nedavno dopuštaju pohranu strukturiranih vrijednosti unutar ćelije i adresiranje unutar ćelije, što ih čini hibridnim radije no relacijskim bazama.}
+
+Ovu ideju je ne samo moguće već i preporučeno odvesti dalje. Na primjer, kada razmislimo o individualnom imenu autora primijetiti ćemo da se ono (najčešće) sastoji od imena i prezimena. Čim smo utvrdili da neka vrijednost ima svoje dijelove, utvrdili smo da je vrijednost složena te, shodno tome, da je struktura podataka primjeren način za reprezentaciju ovakvih vrijednosti. Na primjer, osobno ime možemo prikazati kao:
+
+\begin{lstlisting}[caption={Struktura individualnog osobnog imena}, label={listing:ime}]
+osoba = {
+    'ime': 'Terry', 
+    'prezime': 'Pratchett'
+}
+\end{lstlisting}
+
+Kako ovu ideju iskoristiti u našim podacima?
+
+\begin{lstlisting}[caption={Ugnježđeni podaci 2}, label={listing:ugnj2}]
+zapis = {
+    'Naslov': 'Good Omens', 
+    'Autor': [
+        {'ime': 'Terry', 'prezime': 'Pratchett'},
+        {'ime': 'Neil',  'prezime': 'Gaiman'},
+    ],  
+    'Godina': 1990,
+    'Izdavač': 'Gollancz',
+    'ISBN': '0-575-05800-5'
+}
+
+# još uvjek možemo sve što i prije
+broj_autora = len(zapis['Autor'])
+prvi_autor = zapis['Autor'][0]
+# ali i više
+prezime_prvog_autora = zapis['Autor'][0]['prezime']
+\end{lstlisting}
+
+Kao što vidimo, ovakvo strukturiranje nam omogućava nove radnje s podacima jer se sada možemo referirati na individualne dijelove osobnih imena. Sada nam je, na primjer, lakše generirati stringove u obliku "Ime Prezime", "Prezime, Ime" ili "Prezime, I." za različite potrebe.
+
+Zbirka ovakvih podatkovnih jedinica su naši "strukturirani podaci" s kojima nam sada postaje idealno za raditi u programskom okruženju. Kako ćemo konkretno postaviti podatke  (popis popisa, rječnik rječnika, itd.) ovisi o zadatku, odnosno o tome kako nam je najlakše pristupiti rješenju nekog problema.
+
+% Kako sada ovo znanje iskoristi u praksi je prikazano niže, ali prvo pogledajmo kako opisane podatke zapisivati u standardne formate i tako ih razmjenjivati s aplikacijama i bazama podataka.
