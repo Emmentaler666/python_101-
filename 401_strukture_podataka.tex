@@ -1,570 +1,448 @@
+# Strukture podataka
 
-\section{Strukture podataka}
+*Strukture podataka* valja shvatiti kao *zbirke vrijednosti*, a ova dva
+termina se često koriste i na engleskom (*data structure* i
+*collection*). Upotrebe ovog koncepta su višestruke. Ponekad se neka
+vrijednost po svojoj prirodi sastoji od više pod-vrijednosti. Spomenuli
+smo već tekst koji je zapravo "niz znakova", a možemo tome dodati i
+kojekakve složene vrijednosti poput datuma (tri cijela broja: dan,
+mjesec i godina) ili osobnog imena (dva niza znakova: ime i
+prezime[^1]).
 
-\textit{Strukture podataka} valja shvatiti kao \textit{zbirke vrijednosti}, a ova dva termina se često koriste i na engleskom (\textit{data structure} i \textit{collection}). Upotrebe ovog koncepta su višestruke. Ponekad se neka vrijednost po svojoj prirodi sastoji od više pod-vrijednosti. Spomenuli smo već tekst koji je zapravo "niz znakova", a možemo tome dodati i kojekakve složene vrijednosti poput datuma (tri cijela broja: dan, mjesec i godina) ili osobnog imena (dva niza znakova: ime i prezime\footnote{Osobna imena mogu imati još djelova i upravljanje podacima o osobnim imenima je vrlo kompleksno, ali najjednostavniji slučaj nam je ovdje dovoljno dobar primjer.}). 
+Uz to, ponekad želimo provesti istu radnju na više objekata iste vrste.
+Na primjer, recimo da želimo promijeniti kodnu stranicu svih tekstualnih
+datoteka u nekom direktoriju: Prvo nam je potreban popis svih putanja do
+datoteka koje planiramo procesirati (što je najčešće jednostavno popis
+tekstualnih nizova), a zatim za svaku putanju usnimavamo datoteku i
+zapisujemo tekst u drugu datoteku koja ima drugačiju kodnu stranicu.
+Također, kad radimo s računalnim podacima, na primjer podacima o
+knjigama ili o računima s blagajni, po prirodi stvari radimo sa
+strukturama podataka. Kako bi uopće počeli raditi sa spomenutim
+konceptima potrebno nam je prvo usvojiti neke osnove vezane uz strukture
+podataka.
 
-Uz to, ponekad želimo provesti istu radnju na više objekata iste vrste. Na primjer, recimo da želimo promijeniti kodnu stranicu svih tekstualnih datoteka u nekom direktoriju: Prvo nam je potreban popis svih putanja do datoteka koje planiramo procesirati (što je najčešće jednostavno popis tekstualnih nizova), a zatim za svaku putanju usnimavamo datoteku i zapisujemo tekst u drugu datoteku koja ima drugačiju kodnu stranicu. Također, kad radimo s računalnim podacima, na primjer podacima o knjigama ili o računima s blagajni, po prirodi stvari radimo sa strukturama podataka. Kako bi uopće počeli raditi sa spomenutim konceptima potrebno nam je prvo usvojiti neke osnove vezane uz strukture podataka.
+Postoje posebne *vrste vrijednosti* koje služe upravo strukturiranju
+drugih vrijednosti odnosno koje nam omogućuju da okupljamo vrijednosti
+bilo koje vrste u zbirke vrijednosti. Vrlo je korisno proučiti dvije
+osnovne vrste struktura u Pythonu: popis (`list`) i rječnik (`dict`).
+Učenjem ovih koncepata približavamo se i temeljima razmjene podataka u
+mnogim web uslugama. Tome možemo dodati i skup (`set`) koji se nešto
+manje koristi od popisa i rječnika, ali je u nekim slučajevima vrlo
+korisna struktura.
 
-Postoje posebne \textit{vrste vrijednosti} koje služe upravo strukturiranju drugih vrijednosti odnosno koje nam omogućuju da okupljamo vrijednosti bilo koje vrste u zbirke vrijednosti. Vrlo je korisno proučiti dvije osnovne vrste struktura u Pythonu: popis (\mintinline{python}{list}) i rječnik (\mintinline{python}{dict}). Učenjem ovih koncepata približavamo se i temeljima razmjene podataka u mnogim web uslugama. Tome možemo dodati i skup (\mintinline{python}{set}) koji se nešto manje koristi od popisa i rječnika, ali je u nekim slučajevima vrlo korisna struktura.
+## Popis
 
+*Popis* je niz objekata u kojem se svaki objekt može identificirati
+putem indeksa pozicije na kojoj se nalazi. Već smo vidjeli da je string
+zapravo popis znakova, ali ovo je poseban slučaj popisa koji dozvoljava
+samo tekstualne znakove kao članove. Najčešće korištena struktura pomoću
+koje se implementira popis bilo kojih vrsta vrijednosti u Pythonu je
+`list`. Ovako definiran popis se može mijenjati i vjerojatno je najčešće
+korištena struktura podataka u Python programima. Pogledajmo kako možemo
+stvoriti popis i dohvatiti neki element iz njega.
 
-\subsection{Popis}
+``` python
+\n>>> boje = ["crvena", "zelena", "plava"] # popis definiramo uglatim zagradama \n>>> print(boje) ["crvena", "zelena", "plava"]# elemente dohvaćamo uglatim zagradama i indeksom pozicije # indeksi počinju od 0, odnosno prvi element popisa se nalazi na indeksu 0 \n>>> prva_boja = boje[0] \n>>> print(prva_boja) crvena
+```
 
-\textit{Popis} je niz objekata u kojem se svaki objekt može identificirati putem indeksa pozicije na kojoj se nalazi. Već smo vidjeli da je string zapravo popis znakova, ali ovo je poseban slučaj popisa koji dozvoljava samo tekstualne znakove kao članove. Najčešće korištena struktura pomoću koje se implementira popis bilo kojih vrsta vrijednosti u Pythonu je \mintinline{python}{list}. Ovako definiran popis se može mijenjati i vjerojatno je najčešće korištena struktura podataka u Python programima. Pogledajmo kako možemo stvoriti popis i dohvatiti neki element iz njega.
+Primjer je prikazao najjednostavniji način stvaranja popisa. Zarezom
+odvojeni objekti unutar uglatih zagrada stvaraju popis. Vrijedi
+napomenuti i da unutar popisa, kao i u ostalim zagradama u Pythonu,
+možemo dodavati nove retke radi preglednosti. Na primjer:
 
-\begin{python}{Osnove rada s popisima}{listing:popis_osnove}
->>> boje = ["crvena", "zelena", "plava"]  #  popis definiramo uglatim zagradama
->>> print(boje)
-["crvena", "zelena", "plava"]
+``` python
+\n>>> boje_a = ["crvena", "zelena", "plava"] # popis definiramo uglatim zagradama# popis boje_b identičan je popisu boje_a, samo je raspisan drugačije \n>>> boje_b = [ "crvena", "zelena", "plava" ]\n>>> boje_a == boje_b True
+```
 
-# elemente dohvaćamo uglatim zagradama i indeksom pozicije
-# indeksi počinju od 0, odnosno prvi element popisa se nalazi na indeksu 0
->>> prva_boja = boje[0]
->>> print(prva_boja)
-crvena
-\end{python}
+Mogućnost pisanja struktura u više redaka je korisna za osiguranje
+preglednosti kod većih struktura (na primjer, popisa s 10 i više
+elemenata).
 
-Primjer je prikazao najjednostavniji način stvaranja popisa. Zarezom odvojeni objekti unutar uglatih zagrada stvaraju popis. Vrijedi napomenuti i da unutar popisa, kao i u ostalim zagradama u Pythonu, možemo dodavati nove retke radi preglednosti. Na primjer:
+Također, većina struktura pruža način kako dohvatiti neki individualni
+objekt koji se u njoj nalazi. U mnogim slučajevima to je i poanta
+korištenja Uglate zagrade odmah nakon imena neke varijable u Pythonu (i
+mnogim drugim jezicima) označavaju upravo to: dohvati objekt(e) iz
+strukture podataka putem vrijednosti u uglatim zagradama. Kod popisa je
+to indeks, odnosno cijeli broj koji označava poziciju elementa u popisu,
+gdje je indeks prvog objekta 0, a zadnji je jednak broju objekata u
+popisu -1. Drugim riječima, validni indeksi za popis od četiri objekta
+su 0, 1, 2 u 3. Obzirom da su adrese u popisu jasno definiran raspon
+brojeva, kao indekse možemo koristiti i negativne brojeve i raspone
+brojeva:
 
-\begin{python}{Prelazak u novi redak unutar definicije popisa}{listing:popisi_novi_redak}
->>> boje\_a = ["crvena", "zelena", "plava"]  #  popis definiramo uglatim zagradama
+``` python
+\n>>> boje = ["crvena", "zelena", "plava", "žuta", "ljubičasta"]# dohvati drugu boju iz popisa, odnosno boju na indeksu 1 \n>>> druga_boja = boje[1] \n>>> print(druga_boja) zelena# dohvati zadnju boju iz popisa \n>>> zadnja_boja = boje[-1] \n>>> print(zadnja_boja) ljubičasta# dohvati raspon vrijednosti iz popisa \n>>> neke_boje = boje[1:4] # dohvaća vrijednosti pod indeksima 1, 2 i 3 \n>>> print(neke_boje) ["zelena", "plava", "žuta"] # kod raspona indeksa, vrijednost prvog indeksa je uvijek # uključena u rezultat, a zadnja nije# ukoliko ispustimo zadnji indeks u rasponu, to znači "odaberi do kraja" \n\n\n\n\n>>> sve_osim_prve = boje[1:] \n>>> sve_osim_prve ["zelena", "plava", "žuta", "ljubičasta"]# ukoliko ispustimo prvi indeks u rasponu, to znači "odaberi od početka" \n>>> sve_osim_zadnje = boje[:-1] \n>>> sve_osim_zadnje ["crvena", "zelena", "plava", "žuta"]
+```
 
-# popis boje\_b identičan je popisu boje\_a, samo je raspisan drugačije
->>> boje\_b = [
-    "crvena",
-    "zelena",
-    "plava"
-] 
+Jedan od problema sa strukturama podataka je što je riječ o apstraktnim
+konceptima za koje je pri prvom susretu teško prikazati praktične
+primjere. Ipak, kako bismo se barem približili praksi pogledajmo kako
+dobiti popis članova nekog direktorija:
 
->>> boje\_a == boje\_b
-True
-\end{python}
+``` python
+\n\n\n\n\n>>> import os \n\n\n\n\n>>> os.listdir(’c:/test’) [’dat_a.pdf’, ’dat_b.docx’, ’dat_c.txt’, ’dir_a’, ’dir_b’]
+```
 
-Mogućnost pisanja struktura u više redaka je korisna za osiguranje preglednosti kod većih struktura (na primjer, popisa s 10 i više elemenata).
+Primjer prikazuje kako dobiti popis članova nekog direktorija odnosno
+popis stringova koji su imena datoteka i pod-direktorija u nekom
+direktoriju. U prikazanom slučaju na disku `c` postoji direktorij `test`
+koji sadrži tri datoteke (`dat_a.pdf`, `dat_b.docx` i `dat_c.txt`) i dva
+poddirektorija (`dir_a` i `dir_b`). Jednostavno dobiti popis članova
+nekog direktorija, kao što vidimo, nije teško. Ipak, dok je samo po sebi
+jasno kako bi ovakav popis mogao biti koristan, ima još puno posla kako
+bi s ovime mogli učiniti nešo konkretno: razlikovati datoteke od
+direktorija, izraditi pune putanje od imena, razlikovati različite vrste
+datoteka, pristupati sadržaju datoteke i slično. Drugim riječima,
+problem prvog dodira sa strukturama podataka je što su one vrlo važne za
+programiranje gotovo bilo čega, ali primjeri koji bi prikazali njihovu
+praktičnu uporabu su često preopširni ili prekompleksni za prvi susret.
+Ovaj dio skripte će se, stoga, usredotočiti na jednostavne apstraktne
+primjere rada sa strukturama podataka, a njihova praktična uporaba će se
+prikazati u kasnijim većim primjerima koji rade nešto konkretno ili
+zabavno.
 
-Također, većina struktura pruža način kako dohvatiti neki individualni objekt koji se u njoj nalazi. U mnogim slučajevima to je i poanta korištenja  Uglate zagrade odmah nakon imena neke varijable u Pythonu (i mnogim drugim jezicima) označavaju upravo to: dohvati objekt(e) iz strukture podataka putem vrijednosti u uglatim zagradama. Kod popisa je to indeks, odnosno cijeli broj koji označava poziciju elementa u popisu, gdje je indeks prvog objekta 0, a zadnji je jednak broju objekata u popisu -1. Drugim riječima, validni indeksi za popis od četiri objekta su 0, 1, 2 u 3. Obzirom da su adrese u popisu jasno definiran raspon brojeva, kao indekse možemo koristiti i negativne brojeve i raspone brojeva:
+### Funkcija `list`
 
-\begin{python}{Adresiranje vrijednosti unutar popisa}{listing:popisi_adresiranje}
-# definiraj popis
->>> boje = ["crvena", "zelena", "plava", "žuta", "ljubičasta"]
-
-# dohvati drugu boju iz popisa, odnosno boju na indeksu 1
->>> druga\_boja = boje[1]
->>> print(druga\_boja)
-zelena
-
-# dohvati zadnju boju iz popisa
->>> zadnja\_boja = boje[-1]
->>> print(zadnja\_boja)
-ljubičasta
-
-# dohvati raspon vrijednosti iz popisa
->>> neke\_boje = boje[1:4] # dohvaća vrijednosti pod indeksima 1, 2 i 3
->>> print(neke\_boje)
-["zelena", "plava", "žuta"]
-# kod raspona indeksa, vrijednost prvog indeksa je uvijek 
-# uključena u rezultat, a zadnja nije
-
-# ukoliko ispustimo zadnji indeks u rasponu, to znači "odaberi do kraja"
->>> sve\_osim\_prve = boje[1:]
->>> sve\_osim\_prve
-["zelena", "plava", "žuta", "ljubičasta"]
-
-# ukoliko ispustimo prvi indeks u rasponu, to znači "odaberi od početka"
->>> sve\_osim\_zadnje = boje[:-1]
->>> sve\_osim\_zadnje
-["crvena", "zelena", "plava", "žuta"]
-\end{python}
-
-Jedan od problema sa strukturama podataka je što je riječ o apstraktnim konceptima za koje je pri prvom susretu teško prikazati praktične primjere. Ipak, kako bismo se barem približili praksi pogledajmo kako dobiti popis članova nekog direktorija:
-
-\begin{python}{Popis članova nekog direktorija}{listing:popisi_listdir}
->>> import os
->>> os.listdir('c:/test')
-['dat\_a.pdf', 'dat\_b.docx', 'dat\_c.txt', 'dir\_a', 'dir\_b']
-\end{python}
-
-Primjer prikazuje kako dobiti popis članova nekog direktorija odnosno popis stringova koji su imena datoteka i pod-direktorija u nekom direktoriju. U prikazanom slučaju na disku \mintinline{python}{c} postoji direktorij \mintinline{python}{test} koji sadrži tri datoteke (\mintinline{python}{dat_a.pdf}, \mintinline{python}{dat_b.docx} i \mintinline{python}{dat_c.txt}) i dva poddirektorija (\mintinline{python}{dir_a} i \mintinline{python}{dir_b}). Jednostavno dobiti popis članova nekog direktorija, kao što vidimo, nije teško. Ipak, dok je samo po sebi jasno kako bi ovakav popis mogao biti koristan, ima još puno posla kako bi s ovime mogli učiniti nešo konkretno: razlikovati datoteke od direktorija, izraditi pune putanje od imena, razlikovati različite vrste datoteka, pristupati sadržaju datoteke i slično. Drugim riječima, problem prvog dodira sa strukturama podataka je što su one vrlo važne za programiranje gotovo bilo čega, ali primjeri koji bi prikazali njihovu praktičnu uporabu su često preopširni ili prekompleksni za prvi susret. Ovaj dio skripte će se, stoga, usredotočiti na jednostavne apstraktne primjere rada sa strukturama podataka, a njihova praktična uporaba će se prikazati u kasnijim većim primjerima koji rade nešto konkretno ili zabavno.
-
-\subsubsection{Funkcija \mintinline{python}{list}}
-
-Kao i kod tzv. primitivnih vrsti vrijednosti u Pythonu (\mintinline{python}{int}, \mintinline{python}{float}, \mintinline{python}{bool}, \mintinline{python}{str}), nazivi struktura vrijednosti su također i funkcije s kojima možemo druge objekte pretvarati u tu strukturu. Funkcija \mintinline{python}{list} prima jedan parametar i raščlanjuje poslanu vrijednost na sastavne elemente te vraća rezultat kao popis. 
-
-Pogledajmo primjere:
-
-\begin{python}{Funkcija list}{listing:popisi_list}
->>> s = "popis"
->>> print(s)
-popis
->>> l = list(s)
->>> print(l)
-["p", "o", "p", "i", "s"]
-
->>> r = range(5, 10)  # raspon je posebna vrsta vrijednosti
->>> print(r)
-range(5, 10)     
->>> l = list(r)       # koja se može pretvoriti u popis
->>> print(l)
-[5, 6, 7, 8, 9]
-
-# ukoliko se vrijednost koja je poslana funkciji list kao parametar ne može
-# raščlaniti na pod-vrijednosti, funkcija list javlja grešku
->>> i = 7
->>> l = list(i)
-Traceback (most recent call last):
-  File "<pyshell#25>", line 1, in <module>
-    l = list(i)
-TypeError: "int" object is not iterable
-\end{python}
-
-U zadnjoj liniji prijašnjeg primjera vidimo grešku koja se javlja kada pokušamo pretvoriti u popis nešto što se ne da raščlaniti na sastavne djelove. U ovom slučaju radi se o cijelom broju. Kao što vidimo, poruka kaže "objekt vrste int nije iterativan". Sjetimo se, kada je vrijednost "iterativna", to znači da se po njoj ne može prebirati što je upravo zahtjev da bi se nešto moglo pretvoriti u popis. Vrijednost moramo moći "izlistati".
-
-\subsubsection{Promjene popisa}
-
-Najjednostavnija promjena popisa je promjena vrijednosti koja se nalazi na nekom indeksu. Pogledajmo primjer:
-
-\begin{python}{Zamjena vrijednosti u popisu}{listing:popisi_zamijena}
->>> boje = ["crvena", "zelena", "plava"]
->>> boje[1] = "ljubičasta"  # postavi drugi element popisa na vrijednost "ljubičasta"
->>> print(boje)
-["crvena", "ljubičasta", "plava"]
-\end{python}
-
-Ostale promjene popisa se provode putem metoda koje pruža vrsta vrijednosti \textit{list}. Ovih metoda nema puno i većina ih provodi relativno jednostavne i očekivanje radnje. Pogledajmo koje su to:
-
-\begin{itemize}
-
-\item \textit{append} - dodaj novi član na kraj popisa
-
-\item \textit{clear} - obriši sve članove popisa, odnosno isprazni popis
-
-\item \textit{copy} - napravi neovisnu kopiju popisa u memoriji
-
-\item \textit{extend} - proširi popis svim članovima drugog popisa
-
-\item \textit{insert} - ubaci novi član u popis na određeni indeks
-
-\item \textit{pop} - izbaci zadnji član iz popisa ili izbaci član na nekom indeksu
-
-\item \textit{remove} - izbaci prvi član koji je pronađen u popisu
-
-\item \textit{reverse} - obrni redoslijed članova popisa
-
-\item \textit{sort} - sortiraj popis
-
-\end{itemize}
-
+Kao i kod tzv. primitivnih vrsti vrijednosti u Pythonu (`int`, `float`,
+`bool`, `str`), nazivi struktura vrijednosti su također i funkcije s
+kojima možemo druge objekte pretvarati u tu strukturu. Funkcija `list`
+prima jedan parametar i raščlanjuje poslanu vrijednost na sastavne
+elemente te vraća rezultat kao popis.
 
 Pogledajmo primjere:
 
+U zadnjoj liniji prijašnjeg primjera vidimo grešku koja se javlja kada
+pokušamo pretvoriti u popis nešto što se ne da raščlaniti na sastavne
+djelove. U ovom slučaju radi se o cijelom broju. Kao što vidimo, poruka
+kaže "objekt vrste int nije iterativan". Sjetimo se, kada je vrijednost
+"iterativna", to znači da se po njoj ne može prebirati što je upravo
+zahtjev da bi se nešto moglo pretvoriti u popis. Vrijednost moramo moći
+"izlistati".
 
-\begin{python}{Promjene popisa}{listing:popisi_promjene}
+### Promjene popisa
 
-# definiraj popis
->>> boje = ["crvena", "zelena", "plava"]
+Najjednostavnija promjena popisa je promjena vrijednosti koja se nalazi
+na nekom indeksu. Pogledajmo primjer:
 
-# dodaj vrijednost na kraj popisa
->>> boje.append("žuta")  
->>> print(boje)
-["crvena", "zelena", "plava", "žuta"]
+``` python
+\n>>> boje = ["crvena", "zelena", "plava"] \n>>> boje[1] = "ljubičasta" # postavi drugi element popisa na vrijednost "ljubičasta" \n>>> print(boje) ["crvena", "ljubičasta", "plava"]
+```
 
-# proširi popis svim vrijednostima iz drugog popisa
->>> druge_boje = ["crna", "bijela"]
->>> boje.extend(druge_boje)
->>> print(boje)
-["crvena", "zelena", "plava", "žuta", "crna", "bijela"]
+Ostale promjene popisa se provode putem metoda koje pruža vrsta
+vrijednosti *list*. Ovih metoda nema puno i većina ih provodi relativno
+jednostavne i očekivanje radnje. Pogledajmo koje su to:
 
-# ubaci vrijednost na određeni indeks
->>> boje.insert(2, "zelena")  
->>> print(boje)
-["crvena", "zelena", "zelena", "plava", "žuta", "crna", "bijela"]
+- *append* - dodaj novi član na kraj popisa
 
-# dohvati i izbaci zadnju vrijednost u popisu
->>> zadnja_boja = boje.pop()  
->>> print(zadnja_boja)
-bijela
->>> print(boje)
-["crvena", "zelena", "zelena", "plava", "žuta", "crna"]
+- *clear* - obriši sve članove popisa, odnosno isprazni popis
 
-# dohvati i izbaci vrijednost u popisu na nekom indeksu
->>> boje = ["crvena", "zelena", "zelena", "plava", "žuta", "crna"]
->>> peta_boja = boje.pop(4)
->>> print(peta_boja)
-žuta
->>> print(boje)
-["crvena", "zelena", "zelena", "plava", "crna"]
+- *copy* - napravi neovisnu kopiju popisa u memoriji
 
-#  izbaci PRVU pronađenu vrijednost
->>> boje.remove("zelena")
->>> print(boje)
-["crvena", "zelena", "plava", "crna"]
+- *extend* - proširi popis svim članovima drugog popisa
 
-#  sortiraj popis
->>> boje.sort()
->>> print(boje)
-["crna", "crvena", "plava", "zelena"]
-\end{python}
+- *insert* - ubaci novi član u popis na određeni indeks
 
+- *pop* - izbaci zadnji član iz popisa ili izbaci član na nekom indeksu
 
-\subsubsection{Informacije o članstvu popisa}
+- *remove* - izbaci prvi član koji je pronađen u popisu
 
-Uz navedene metode za promjene popisa, postoje i neke koje služe informiranju o članovima popisa:
+- *reverse* - obrni redoslijed članova popisa
 
-\begin{itemize}
-\item \textit{index} - dohvati prvi indeks na kojem se nalazi neki objekt ili javi grešku ukoliko taj objekt nije u popisu
+- *sort* - sortiraj popis
 
-\item \textit{count} - prebroji koliko se puta neki vrijednost pojavljuje u popisu
-\end{itemize}
+Pogledajmo primjere:
 
-\begin{python}{Informacije o članstvu popisa}{listing:popisi_clanstvo}
->>> boje = ["crvena", "zelena", "zelena", "plava", "crna"]
->>> boje.index("zelena")
-1
->>> boje.index("žuta")
-Traceback (most recent call last):
-  File "<pyshell#2>", line 1, in <module>
-    boje.index("žuta")
-ValueError: "žuta" is not in list
+``` python
+\n>>> boje = ["crvena", "zelena", "plava"]# dodaj vrijednost na kraj popisa \n>>> boje.append("žuta") \n>>> print(boje) ["crvena", "zelena", "plava", "žuta"]# proširi popis svim vrijednostima iz drugog popisa \n>>> druge_boje = ["crna", "bijela"] \n>>> boje.extend(druge_boje) \n>>> print(boje) ["crvena", "zelena", "plava", "žuta", "crna", "bijela"]# ubaci vrijednost na određeni indeks \n>>> boje.insert(2, "zelena") \n>>> print(boje) ["crvena", "zelena", "zelena", "plava", "žuta", "crna", "bijela"]# dohvati i izbaci zadnju vrijednost u popisu \n>>> zadnja_boja = boje.pop() \n>>> print(zadnja_boja) bijela \n>>> print(boje) ["crvena", "zelena", "zelena", "plava", "žuta", "crna"]# dohvati i izbaci vrijednost u popisu na nekom indeksu \n>>> boje = ["crvena", "zelena", "zelena", "plava", "žuta", "crna"] \n>>> peta_boja = boje.pop(4) \n>>> print(peta_boja) žuta \n>>> print(boje) ["crvena", "zelena", "zelena", "plava", "crna"]# izbaci PRVU pronađenu vrijednost \n>>> boje.remove("zelena") \n>>> print(boje) ["crvena", "zelena", "plava", "crna"]# sortiraj popis \n>>> boje.sort() \n>>> print(boje) ["crna", "crvena", "plava", "zelena"]
+```
 
->>> boje.count("zelena")
-2
->>> boje.count("žuta")
-0
-\end{python}
+### Informacije o članstvu popisa
 
+Uz navedene metode za promjene popisa, postoje i neke koje služe
+informiranju o članovima popisa:
 
-\subsubsection{Prebiranje i funkcija \textit{range}}
+- *index* - dohvati prvi indeks na kojem se nalazi neki objekt ili javi
+  grešku ukoliko taj objekt nije u popisu
+
+- *count* - prebroji koliko se puta neki vrijednost pojavljuje u popisu
+
+### Prebiranje i funkcija *range*
 
 Petlja "za svaki", naravno, normalno radi s popisima.
 
-\begin{python}{Prebiranje po članovima popisa}{listing:popisi_prebiranje}
->>> boje = ["crvena", "zelena", "plava"]
->>> for boja in boje:
-        print(boja)
-\end{python}
+``` python
+\n>>> boje = ["crvena", "zelena", "plava"] \n>>> for boja in boje: print(boja)
+```
 
 Rezltat:
 
-\begin{python}[nolol]
-crvena
-zelena
-plava
-\end{python}
+``` python
+crvena zelena plava
+```
 
-Uz navedeno, često je korisno prebirati po \textbf{indeksima}, a ne po vrijednostima popisa. U tu svrhu, vrlo nam je korisna funkcija \mintinline{python}{range}. Ta funkcija služi stvaranju niza brojeva od nekog početnog do nekog završnog. Pogledajmo primjere:
+Uz navedeno, često je korisno prebirati po **indeksima**, a ne po
+vrijednostima popisa. U tu svrhu, vrlo nam je korisna funkcija `range`.
+Ta funkcija služi stvaranju niza brojeva od nekog početnog do nekog
+završnog. Pogledajmo primjere:
 
-\begin{python}{Funkcija range}{listing:range}
->>> r = range(2, 10)
->>> print(r)
-range(2, 10)  # range nije popis!
->>> print(list(r))  # ali bilo koji range možemo pretvoriti u popis
-[2, 3, 4, 5, 6, 7, 8, 9]
+``` python
+\n>>> r = range(2, 10) \n>>> print(r) range(2, 10) # range nije popis! \n>>> print(list(r)) # ali bilo koji range možemo pretvoriti u popis [2, 3, 4, 5, 6, 7, 8, 9]\n>>> r = range(0, 5) \n>>> print(list(r)) [0, 1, 2, 3, 4]\n>>> r = range(5) # ako pošaljemo samo jedan broj, smatra se da je početni broj 0 \n>>> print(list(r)) [0, 1, 2, 3, 4]\n>>> boje = ["crvena", "zelena", "zelena", "plava", "crna"] \n>>> broj_boja = len(boje) \n>>> for i in range(broj_boja): print("Na indeksu", i, "nalazi se", boje[i])Na indeksu 0 nalazi se crvena Na indeksu 1 nalazi se zelena Na indeksu 2 nalazi se zelena Na indeksu 3 nalazi se plava Na indeksu 4 nalazi se crna
+```
 
->>> r = range(0, 5)
->>> print(list(r))
-[0, 1, 2, 3, 4]
+Kao što vidimo, funkcija `range` posebno je korisna za generiranje
+validnih indeksa za popis. Kao i kod indeksa popisa, ova funkcija
+uključuje prvu vrijednost, a zadnju ne. Na primjer, `range(0, 4)`
+generira brojeve 0, 1, 2 i 3. Ukoliko traženi brojevi počinju od 0,
+funkcija range se može pozvati sa samo jednim parametrom koji označava
+do kojeg broja se generira. Ovo nam omogućuje da ukoliko želimo
+generirati sve validne indekse za neki popis to možemo učiniti
+jednostavnim izrazom `range(len(neki_popis))`.
 
->>> r = range(5)  # ako pošaljemo samo jedan broj, smatra se da je početni broj 0
->>> print(list(r))
-[0, 1, 2, 3, 4]
+Osim definiranja minimuma i maksimuma, `range` prima i opcionalni treći
+parametar: korak (eng. *step*). Ovaj parametar je zadan na 1 i definira
+pomak između dva broja koja se generiraju funkcijom `range`. Navedeno je
+možda teže shvatiti kroz definiciju nego kroz primjer pa pogledajmo
+jedan:
 
->>> boje = ["crvena", "zelena", "zelena", "plava", "crna"]
->>> broj_boja = len(boje)
->>> for i in range(broj_boja):
-	print("Na indeksu", i, "nalazi se", boje[i])
+<div class="minipage">
 
-Na indeksu 0 nalazi se crvena
-Na indeksu 1 nalazi se zelena
-Na indeksu 2 nalazi se zelena
-Na indeksu 3 nalazi se plava
-Na indeksu 4 nalazi se crna
-\end{python}
+``` python
+\n>>> r = range(1, 10) \n>>> print(r) range(1, 10) \n>>> print(list(r)) [1, 2, 3, 4, 5, 6, 7, 8, 9]# range sa zadanim minimumom, maksimumom i korakom \n>>> r = range(1, 10, 2) \n>>> print(r) range(1, 10, 2) \n>>> print(list(r)) [1, 3, 5, 7, 9]
+```
 
-Kao što vidimo, funkcija \mintinline{python}{range} posebno je korisna za generiranje validnih indeksa za popis. Kao i kod indeksa popisa, ova funkcija uključuje prvu vrijednost, a zadnju ne. Na primjer, \mintinline{python}{range(0, 4)} generira brojeve 0, 1, 2 i 3. Ukoliko traženi brojevi počinju od 0, funkcija range se može pozvati sa samo jednim parametrom koji označava do kojeg broja se generira. Ovo nam omogućuje da ukoliko želimo generirati sve validne indekse za neki popis to možemo učiniti jednostavnim izrazom \mintinline{python}{range(len(neki_popis))}.
+</div>
 
-Osim definiranja minimuma i maksimuma, \mintinline{python}{range} prima i opcionalni treći parametar: korak (eng. \textit{step}). Ovaj parametar je zadan na 1 i definira pomak između dva broja koja se generiraju funkcijom \mintinline{python}{range}. Navedeno je možda teže shvatiti kroz definiciju nego kroz primjer pa pogledajmo jedan:
+### *list* i *tuple*
 
-\begin{minipage}{\linewidth}
-\begin{python}{Funkcija range i parametar step}{listing:range_step}
-# range sa zadanim minimumom i maksimumom
->>> r = range(1, 10)
->>> print(r)
-range(1, 10)
->>> print(list(r))
-[1, 2, 3, 4, 5, 6, 7, 8, 9]
+Do sada smo radili samo s popisom vrste `list`, ali to nije jedina vrsta
+popisa. Glavna distinkcija između popisa u Pythonu ovisi o tome da li je
+popis promjenjiv ili nepromjenjiv. `list` je, kao što smo vidjeli iz
+primjera, promjenjiv popis. Postoji i nepromjenjivi popis koji se naziva
+`tuple`. Dohvaćanje elemenata iz obje vrste popisa je identično, ali
+`tuple` se ne definira kroz uglate već kroz oble zagrade, a u mnogim
+slučajevima se može pisati i bez zagrada.
 
-# range sa zadanim minimumom, maksimumom i korakom
->>> r = range(1, 10, 2)
->>> print(r)
-range(1, 10, 2)
->>> print(list(r))
-[1, 3, 5, 7, 9]
-\end{python}
-\end{minipage}
+Kao što vidimo, razlika između prikazane dvije vrste popisa je u tome
+što je `list` moguće mijenjati, a `tuple` ne. Sve što možemo raditi s
+popisom vrste `tuple`, dakle, vrijedi i za popise vrste `list`, ali
+`list` pruža mogućnost promjena u popisu, a `tuple` ne. Pokušaj
+dodavanja nove vrijednosti u `list` je, na primjer, normalan postupak, a
+pokušaj dodavanja nove vrijednosti u `tuple` javlja grešku jer je tuple
+nepromjenjiv. S druge strane, dohvaćanje vrijednosti putem indeksa
+funkcionira identično i za `list` i za `tuple`.
 
+Dok je “popis” relativno jednostavan koncept, kada bismo se dublje
+skoncentrirali na popis kao strukturu podataka u odnosu na računalo,
+vidjeli bismo da postoje različite implementacije istog koncepta koje se
+razlikuju u efikasnosti i mogućnostima. Neke implementacije, na primjer,
+su visoko efikasne, ali ne dopuštaju nikakve promjene. Kod
+implementacija koje omogućuju promjene, različite radnje mogu biti
+različito efikasne (u računalnom žargonu “različito koštaju”) ovisno o
+načinu implementacije popisa. Pythonov `list`, na primjer, je visoko
+efikasan u dodavanju nove vrijednosti na kraj popisa kao i u izbacivanju
+te vrijednosti, ali neefikasan u dodavanju vrijednosti na početak popisa
+ili izbacivanja vrijednosti s početka popisa. Da situacija bude još
+gora, dodavanje odnosno izbacivanje vrijednosti je tim manje efikasno
+čim ima više objekata u popisu nakon objekta koji se dodaje ili
+izbacuje.
 
-\subsubsection{\textit{list} i \textit{tuple}}
+Ukoliko želimo efikasno dodavati i izbacivati vrijednosti iz sredine
+popisa, Python ima uključenu i treću implementaciju popisa koja je
+dostupna iz modula `collections` i zove se `deque`. Zašto onda ne bismo
+uvijek koristili `deque`? Zato jer za dodatne mogućnosti uvijek postoji
+cijena pa je tako popis vrste `deque` manje memorijski efikasan od
+popisa vrste `list`. U svakom slučaju, modul `collections`, kao što ime
+kaže, donosi dodatne strukture podataka koje su specijaliziranije u
+naravi od osnovnih struktura koje se prikazuju u ovom poglavlju i
+uglavnom su njihove varijante.
 
-Do sada smo radili samo s popisom vrste \mintinline{python}{list}, ali to nije jedina vrsta popisa. Glavna distinkcija između popisa u Pythonu ovisi o tome da li je popis promjenjiv ili nepromjenjiv. \mintinline{python}{list} je, kao što smo vidjeli iz primjera, promjenjiv popis. Postoji i nepromjenjivi popis koji se naziva \mintinline{python}{tuple}. Dohvaćanje elemenata iz obje vrste popisa je identično, ali \mintinline{python}{tuple} se ne definira kroz uglate već kroz oble zagrade, a u mnogim slučajevima se može pisati i bez zagrada.
+## Broj objekata u strukturi i provjera članstva
 
-\begin{python}{Promjenjivi i nepromjenjivi popisi}{listing:popisi_tuple}
->>> a = [1, 2, 3]  # list, promjenjivi popis
->>> a.append(4)  # u promjenjivi popis možemo, na primjer, dodati element
->>> print(a)
-[1, 2, 3, 4]
->>> b = (1, 2, 3)  # tuple, nepromjenjivi popis
->>> b.append(4)  # pokušaj promjene javlja grešku
-Traceback (most recent call last):
-File "<pyshell#11>", line 1, in <module>
-b.append(4)
-AttributeError: 'tuple' object has no attribute 'append'
-\end{python}
+Osim spomenutih posebnih metoda koje dozvoljava struktura `list`,
+postoje i dva općenita pitanja koja često želimo postaviti bilo kojoj
+strukturi podataka. Ta pitanja su:
 
-Kao što vidimo, razlika između prikazane dvije vrste popisa je u tome što je \mintinline{python}{list} moguće mijenjati, a \mintinline{python}{tuple} ne. Sve što možemo raditi s popisom vrste \mintinline{python}{tuple}, dakle, vrijedi i za popise vrste  \mintinline{python}{list}, ali \mintinline{python}{list} pruža mogućnost promjena u popisu, a \mintinline{python}{tuple} ne. Pokušaj dodavanja nove vrijednosti u \mintinline{python}{list} je, na primjer, normalan postupak, a pokušaj dodavanja nove vrijednosti u \mintinline{python}{tuple} javlja grešku jer je tuple nepromjenjiv. S druge strane, dohvaćanje vrijednosti putem indeksa funkcionira identično i za \mintinline{python}{list} i za \mintinline{python}{tuple}.
+- Koliko ima vrijednosti u nekoj strukturi?
 
-% TODO Želiš li znati više?
+- Da li neka struktura sadrži neki određeni objekt?
 
-Dok je \textquotedblleft popis\textquotedblright{} relativno jednostavan koncept, kada bismo se dublje skoncentrirali na popis kao strukturu podataka u odnosu na računalo, vidjeli bismo da postoje različite implementacije istog koncepta koje se razlikuju u efikasnosti i mogućnostima. Neke implementacije, na primjer, su visoko efikasne, ali ne dopuštaju nikakve promjene. Kod implementacija koje omogućuju promjene, različite radnje mogu biti različito efikasne (u računalnom žargonu \textquotedblleft različito koštaju\textquotedblright{}) ovisno o načinu implementacije popisa. Pythonov \mintinline{python}{list}, na primjer, je visoko efikasan u dodavanju nove vrijednosti na kraj popisa kao i u izbacivanju te vrijednosti, ali neefikasan u dodavanju vrijednosti na početak popisa ili izbacivanja vrijednosti s početka popisa. Da situacija bude još gora, dodavanje odnosno izbacivanje vrijednosti je tim manje efikasno čim ima više objekata u popisu nakon objekta koji se dodaje ili izbacuje. 
+### Broj objekata u strukturi
 
-Ukoliko želimo efikasno dodavati i izbacivati vrijednosti iz sredine popisa, Python ima uključenu i treću implementaciju popisa koja je dostupna iz modula \mintinline{python}{collections} i zove se \mintinline{python}{deque}. Zašto onda ne bismo uvijek koristili \mintinline{python}{deque}? Zato jer za dodatne mogućnosti uvijek postoji cijena pa je tako popis vrste \mintinline{python}{deque} manje memorijski efikasan od popisa vrste \mintinline{python}{list}. U svakom slučaju, modul \mintinline{python}{collections}, kao što ime kaže, donosi dodatne strukture podataka koje su specijaliziranije u naravi od osnovnih struktura koje se prikazuju u ovom poglavlju i uglavnom su njihove varijante.
+Broj objekata u nekoj strukturi podataka često se naziva i “duljinom” te
+strukture. Python funkcija `len` vraća upravo taj broj.
 
-\subsection{Broj objekata u strukturi i provjera članstva}
+``` python
+\n>>> boje = ["crvena", "zelena", "plava"] \n>>> n_boja = len(boje) \n>>> print(n_boja) 3
+```
 
-Osim spomenutih posebnih metoda koje dozvoljava struktura \mintinline{python}{list}, postoje i dva općenita pitanja koja često želimo postaviti bilo kojoj strukturi podataka. Ta pitanja su:
+`len` je funkcija koja radi na svim vrstama objekata za koje je pitanje
+"Koliko ima elemenata (tj. podobjekata) u ovom objektu?" validno. Ako
+pitanje nije validno, odnosno objekt koji je poslan kao parametar ga ne
+podržava, `len` javlja grešku.
 
-\begin{itemize}
-	\item Koliko ima vrijednosti u nekoj strukturi?
-	\item Da li neka struktura sadrži neki određeni objekt?
-\end{itemize}
+Kao što je za očekivati, poziv funkcije `len` s cijelim brojem kao
+parametrom javlja grešku koju možemo čitati kao "cijeli brojevi nemaju
+broj elemenata". `len` teksta, međutim, vraća vrijednost jer je kod
+teksta to "broj znakova".
 
-\subsubsection{Broj objekata u strukturi}
+### Provjera članstva neke strukture
 
-Broj objekata u nekoj strukturi podataka često se naziva i \textquotedblleft duljinom\textquotedblright{} te strukture. Python funkcija \mintinline{python}{len} vraća upravo taj broj.
+Također, postoji univerzalan način provjere da li se neka vrijednost
+nalazi u određenoj zbirci vrijednosti i to putem operatora `in`.
+Pogledajmo primjere:
 
-\begin{python}{Funkcija \mintinline{python}{len}}{listing:len}
->>> boje = ["crvena", "zelena", "plava"]
->>> n_boja = len(boje)
->>> print(n_boja)
-3
-\end{python}
+``` python
+\n>>> if "š" in "Krešimir": print(’"Krešimir" sadrži "š".’)"Krešimir" sadrži "š".\n>>> boje = ["crvena", "zelena", "zelena", "plava", "crna"] \n>>> "zelena" in boje True\n>>> "žuta" in boje False
+```
 
-\mintinline{python}{len} je funkcija koja radi na svim vrstama objekata za koje je pitanje "Koliko ima elemenata (tj. podobjekata) u ovom objektu?" validno. Ako pitanje nije validno, odnosno objekt koji je poslan kao parametar ga ne podržava, \mintinline{python}{len} javlja grešku.
+## Rječnik
 
-\begin{python}{Funkcija \mintinline{python}{len} i različite vrste vrijednosti}{listing:len_vrste}
->>> t = "tekst"
->>> n_t = len(t)
->>> print(n_t)
-5
->>> x = 1
->>> n_x = len(x)
-Traceback (most recent call last):
-File "<pyshell#5>", line 1, in <module>
-len(x)
-TypeError: object of type "int" has no len()
-\end{python}
+Rječnik je skup “ključ: vrijednost“ parova. Za razliku od popisa,
+rječnik nema značajan redoslijed objekata, već svaki objekt koji se
+pohranjuje kao vrijednost ima vlastiti ključ odnosno “šifru” ili “ime”
+po kojem ga se može dohvatiti. Rječnik se definira vitičastim zagradama
+i s dvotočkom kao znakom koji razgraničuje ključeve od vrijednosti.
+Pogledajmo primjer:
 
-Kao što je za očekivati, poziv funkcije \mintinline{python}{len} s cijelim brojem kao parametrom javlja grešku  koju možemo čitati kao "cijeli brojevi nemaju broj elemenata". \mintinline{python}{len} teksta, međutim, vraća vrijednost jer je kod teksta to "broj znakova".
+``` python
+\n\>>> data = "boja": "plava", "visina": 30 # rječnik s dva elementa # svaki element se sastoji od ključa # i vrijednosti koja mu je pridružena \n>>> print(data["boja"]) plava \n>>> print(data["visina"]) 30
+```
 
-\subsubsection{Provjera članstva neke strukture}
+Rječnik je vrlo intuitivna struktura za opis nekog predmeta odnosno za
+strukturiranje metapodataka. Na primjer, metapodaci ugrađeni u neku
+glazbenu datoteku mogli bi se prikazati kao:
 
-Također, postoji univerzalan način provjere da li se neka vrijednost nalazi u određenoj zbirci vrijednosti i to putem operatora \mintinline{python}{in}. Pogledajmo primjere:
+``` python
+Rječnici i metapodacilisting:dict_metapodaci track_data =  "artist": "Monty Python", "title": "Lumberjack Song", "album": "Monty Python Sings", "year": 1989
+```
 
-\begin{python}{Operator \mintinline{python}{in}}{listing:in}
->>> if "š" in "Krešimir":
-        print('"Krešimir" sadrži "š".')
+Osim toga, rječnik je, kao što ime kaže, koristan i za “prevođenje”
+vrijednosti. Pogledajmo doslovan primjer. Recimo da dobivamo podatke
+poput varijable “track_data” u primjeru niže iz neke vanjske usluge i
+želimo prevesti ključeve (odnosno nazive polja) na neke naše nazive.
 
-"Krešimir" sadrži "š".
-
-
->>> boje = ["crvena", "zelena", "zelena", "plava", "crna"]
->>> "zelena" in boje
-True
-
->>> "žuta" in boje
-False
-\end{python}
-
-
-\subsection{Rječnik}
-
-Rječnik je skup \textquotedblleft ključ: vrijednost\textquotedblleft{} parova. Za razliku od popisa, rječnik nema značajan redoslijed objekata, već svaki objekt koji se pohranjuje kao vrijednost ima vlastiti ključ odnosno \textquotedblleft šifru\textquotedblright{} ili \textquotedblleft ime\textquotedblright{} po kojem ga se može dohvatiti. Rječnik se definira vitičastim zagradama i s dvotočkom kao znakom koji razgraničuje ključeve od vrijednosti. Pogledajmo primjer:
-
-\begin{python}{Osnove rada s rječnicima}{listing:dict_osnove}
->>> data = {"boja": "plava", "visina": 30}  # rječnik s dva elementa
-# svaki element se sastoji od ključa
-# i vrijednosti koja mu je pridružena
->>> print(data["boja"])
-plava
->>> print(data["visina"])
-30
-\end{python}
-
-Rječnik je vrlo intuitivna struktura za opis nekog predmeta odnosno za strukturiranje metapodataka. Na primjer, metapodaci ugrađeni u neku glazbenu datoteku mogli bi se prikazati kao:
-
-\begin{python}{Rječnici i metapodaci}{listing:dict_metapodaci}
-track_data = {
-    "artist": "Monty Python",
-    "title": "Lumberjack Song",
-    "album": "Monty Python Sings",
-    "year": 1989
-}
-\end{python}
-
-Osim toga, rječnik je, kao što ime kaže, koristan i za \textquotedblleft prevođenje\textquotedblright{} vrijednosti. Pogledajmo doslovan primjer. Recimo da dobivamo podatke poput varijable \textquotedblleft track\_data\textquotedblright{} u primjeru niže iz neke vanjske usluge i želimo prevesti ključeve (odnosno nazive polja) na neke naše nazive.
-
-\lstinputlisting[caption={Korištenje rječnika za prevođenje}, label={listing:dict_prijevod}]{code_python_osnove/dict_a.py}
+``` python
+```
 
 Prikazan kod ispisuje:
 
-\begin{python}[nolol]
-{"album": "Monty Python Sings",
- "godina": 1989,
- "naslov": "Lumberjack Song",
- "umjetnik": "Monty Python"}
-\end{python}
- 
-Također, primijetimo da prebiranje po rječniku s petljom \mintinline{python}{for} prebire po ključevima. Što ako želimo prebirati po vrijednostima ili po ključevima i vrijednostima odjednom?
+``` python
+"album": "Monty Python Sings", "godina": 1989, "naslov": "Lumberjack Song", "umjetnik": "Monty Python"
+```
 
-\begin{python}{Prebiranje po vrijednostima rječnika}{listing:dict_values}
-for value in track_data.values():  # prebire po vrijednostima
-    print(value)
-\end{python}
+Također, primijetimo da prebiranje po rječniku s petljom `for` prebire
+po ključevima. Što ako želimo prebirati po vrijednostima ili po
+ključevima i vrijednostima odjednom?
+
+``` python
+Prebiranje po vrijednostima rječnikalisting:dict_values for value in track_data.values(): # prebire po vrijednostima print(value)
+```
 
 Rezultat:
 
-\begin{python}[nolol]
-1989
-Lumberjack Song
-Monty Python Sings
-Monty Python
-\end{python}
- 
-Redoslijed vrijednosti po kojima se prebire za razliku od liste nije konzistentan. U drugom prebiranju, redoslijed ispisanih vrijednosti može biti drugačiji. Drugim riječima, adresa vrijednosti nije određena pozicijom već imenom. Radi toga je često korisno i prebirati po ključevima i vrijednostima odjednom. Pogledajmo kako:
- 
-\begin{python}[caption={Prebiranje po ključ-vrijednost parovima}, label={listing:dict_items}]
-for key, value in track_data.items():  # prebire po (ključ, vrijednost) parovima
-    print(key, value)
-\end{python}
+``` python
+1989 Lumberjack Song Monty Python Sings Monty Python
+```
+
+Redoslijed vrijednosti po kojima se prebire za razliku od liste nije
+konzistentan. U drugom prebiranju, redoslijed ispisanih vrijednosti može
+biti drugačiji. Drugim riječima, adresa vrijednosti nije određena
+pozicijom već imenom. Radi toga je često korisno i prebirati po
+ključevima i vrijednostima odjednom. Pogledajmo kako:
+
+``` python
+for key, value in track_data.items(): # prebire po (ključ, vrijednost) parovima print(key, value)
+```
 
 Rezultat:
 
-\begin{python}[nolol]
-year 1989
-title Lumberjack Song
-album Monty Python Sings
-artist Monty Python
-\end{python}
- 
+``` python
+year 1989 title Lumberjack Song album Monty Python Sings artist Monty Python
+```
 
-\subsubsection{Funkcija \textit{dict}}
+### Funkcija *dict*
 
-Funkcija \mintinline{python}{dict} služi stvaranju rječnika. Kao i sve ostale funkcije koje označavaju vrstu vrijednosti, poziv bez parametara stvara prazan rječnik.
+Funkcija `dict` služi stvaranju rječnika. Kao i sve ostale funkcije koje
+označavaju vrstu vrijednosti, poziv bez parametara stvara prazan
+rječnik.
 
-\begin{python}{Funkcija dict}{listing:dict_funkcija}
->>> d = dict()  # isto što i d = {}
->>> print(d)
-{}
-\end{python}
+``` python
+\n>>> d = dict() # isto što i d = \n>>> print(d)
+```
 
-Poziv na \mintinline{python}{dict} s imenovanim parametrima stvara novi rječnik s tim parametrima kao ključevima.
+Poziv na `dict` s imenovanim parametrima stvara novi rječnik s tim
+parametrima kao ključevima.
 
-\begin{python}{Funkcija dict i imenovani parametri}{listing:dict_imenovani_parametri}
-d = dict(a=1, b=2)
-print(d)
-\end{python}
+``` python
+Funkcija dict i imenovani parametrilisting:dict_imenovani_parametri d = dict(a=1, b=2) print(d)
+```
 
-\textit{dict} može primiti i popis parova, odnosno popis popisa gdje svaki pod-popis ima dva člana: ključ i vrijednost.
+*dict* može primiti i popis parova, odnosno popis popisa gdje svaki
+pod-popis ima dva člana: ključ i vrijednost.
 
-\begin{python}{Funkcija dict i popis parova}{listing:dict_parovi}
-popis_parova = [
-    ["a", 1],
-    ["b", 2],
-    ["c", 1]
-]
-d = dict(popis_parova)
-print(d)
-popis_parova = list(d.items()) # popis parova možemo i dohvatiti iz rječnika
-print(popis_parova)
-\end{python}
+``` python
+Funkcija dict i popis parovalisting:dict_parovi popis_parova = [ ["a", 1], ["b", 2], ["c", 1] ] d = dict(popis_parova) print(d) popis_parova = list(d.items()) # popis parova možemo i dohvatiti iz rječnika print(popis_parova)
+```
 
-\subsection{Skup}
+## Skup
 
-Skup je implementacija matematičkog koncepta skupa: zbirka jedinstvenih vrijednosti bez značajnog redoslijeda. U smislu onoga što već znamo o Pythonu, skup možemo shvatiti kao samo ključeve rječnika bez pridruženih vrijednosti.
+Skup je implementacija matematičkog koncepta skupa: zbirka jedinstvenih
+vrijednosti bez značajnog redoslijeda. U smislu onoga što već znamo o
+Pythonu, skup možemo shvatiti kao samo ključeve rječnika bez pridruženih
+vrijednosti.
 
-\begin{python}{Skupovi u Pythonu}{listing:set_osnove}
->>> s = set()
->>> s.add(1)
->>> print(s)
-{1}
->>> s.add(2)
->>> print(s)
-{1, 2}
->>> s.add(2)  # skup već sadrži vrijednost 2 pa nema promjene
->>> print(s)
-{1, 2}
-\end{python}
+``` python
+\n>>> s = set() \n>>> s.add(1) \n\n\n\n\n>>> print(s) 1 \n>>> s.add(2) \n>>> print(s) 1, 2 \n>>> s.add(2) # skup već sadrži vrijednost 2 pa nema promjene \n>>> print(s) 1, 2
+```
 
-Skup je rjeđe korištena struktura od popisa i rječnika, ali je vrlo korisna u nekim slučajevima. 
+Skup je rjeđe korištena struktura od popisa i rječnika, ali je vrlo
+korisna u nekim slučajevima.
 
+### Funkcija *set* i stvaranje novih skupova podataka
 
-\subsubsection{Funkcija \textit{set} i stvaranje novih skupova podataka}
+Kao i u matematici, skup se označava vitičastim zagradama. Razlika od
+rječnika je što se skup ne sastoji od "ključ: vrijednost" parova, već od
+individualnih elemenata. Nažalost, obzirom da se vitičaste zagrade
+koriste i za rječnik i za skup, prazan skup **moramo** definirati pomoću
+funkcije *set*. Kada želimo definirati skup postojećih vrijednosti,
+možemo koristiti i vitičaste zagrade. Pogledajmo neke primjere
+definicije skupova:
 
-Kao i u matematici, skup se označava vitičastim zagradama. Razlika od rječnika je što se skup ne sastoji od "ključ: vrijednost" parova, već od individualnih elemenata. Nažalost, obzirom da se vitičaste zagrade koriste i za rječnik i za skup, prazan skup \textbf{moramo} definirati pomoću funkcije \textit{set}. Kada želimo definirati skup postojećih vrijednosti, možemo koristiti i vitičaste zagrade. Pogledajmo neke primjere definicije skupova:
+``` python
+\n>>> s = # pažnja! prazan rječnik \n>>> print(s)\n>>> s = set() # prazan skup \n>>> print(s) set()\n>>> s = "a", "b", "c" # skup s članovima \n>>> print(s) "a", "c", "b"\n>>> s = set("ana") # napravi skup od elemenata vrijednosti (npr, tekst) \n>>> s "a", "n"\n>>> s = set(["ana"]) # napravi skup od elemenata popisa \n>>> s "ana"\n>>> d = "a": 1, "b": 2, "c": 1 # definiraj neki rječnik \n>>> set(d) # ključevi rječnika kao skup "a", "c", "b" \n>>> set(d.values()) # sve različite vrijednosti u rječniku 1, 2
+```
 
-\begin{python}{Skupovi i ostale vrste struktura}{listing:set_strukture}
->>> s = {}  # pažnja! prazan rječnik
->>> print(s)
-{}
+### Operacije sa skupovima
 
->>> s = set()  # prazan skup
->>> print(s)
-set()
+Za razliku od popisa i rječnika, skup ne pruža način dohvata neke
+odabrane vrijednosti iz zbirke. Drugim riječima, vrijednosti u skupu ne
+možemo jednoznačno adresirati jer vrijednosti nemaju niti konzistentan
+redoslijed (pa ne možemo koristiti poziciju neke vrijednosti kao indeks)
+niti se vrijednosti mogu identificirati putem kakvog ključa. Zašto bismo
+onda prikupljali vrijednosti u skupove? Skupovi omogućuju matematičke
+operacije sa skupovima poput unije, presjeka i razlike, odnosno
+operacije koje su vrlo korisne u radu s podacima. Pogledajmo primjere:
 
->>> s = {"a", "b", "c"}  # skup s članovima
->>> print(s)
-{"a", "c", "b"}
+``` python
+\n>>> a.intersection(b) # ili a & b "c", "b" \n>>> a & b # isto što i a.intersection(b) "c", "b" \n>>> a.union(b) # ili a | b "a", "d", "c", "b" \n>>> a.difference(b) # ili a - b "a" \n>>> b.difference(a) # ili b - a "d"
+```
 
->>> s = set("ana")  # napravi skup od elemenata vrijednosti (npr, tekst)
->>> s
-{"a", "n"}
+Također, svojstvo skupa da sadrži samo različite vrijednosti je često
+korisno. Sljedeći primjer prikazuje kako ga možemo jednostavno
+iskoristiti da prebrojimo sve jedinstvene vrijednosti u nekoj zbirci
+vrijednosti.
 
->>> s = set(["ana"])  # napravi skup od elemenata popisa
->>> s
-{"ana"}
+``` python
+\n>>> boje = ["crvena", "plava", "crvena", "zelena", "plava"] \n>>> skup_boja = set(boje) \n>>> print("N boja:", len(boje)) N boja: 4 \n>>> print("N različitih boja:", len(skup_boja)) N različitih boja: 3
+```
 
->>> d = {"a": 1, "b": 2, "c": 1}  # definiraj neki rječnik
->>> set(d)  # ključevi rječnika kao skup
-{"a", "c", "b"}
->>> set(d.values())  # sve različite vrijednosti u rječniku
-{1, 2}
-\end{python}
+Prikazane strukture podataka izvrsan su prvi susret s temom i već samo
+prikazani koncepti nas opunumoćuju ne samo u programiranju već i u
+općenitom radu s podacima kao i u razumijevanju vezane tematike. U
+idućem poglavlju je upravo riječ o osnovama korištenja ovih struktura za
+obradu podataka.
 
-\subsubsection{Operacije sa skupovima}
+[^1]: Osobna imena mogu imati još djelova i upravljanje podacima o
+    osobnim imenima je vrlo kompleksno, ali najjednostavniji slučaj nam
+    je ovdje dovoljno dobar primjer.
 
-Za razliku od popisa i rječnika, skup ne pruža način dohvata neke odabrane vrijednosti iz zbirke. Drugim riječima, vrijednosti u skupu ne možemo jednoznačno adresirati jer vrijednosti nemaju niti konzistentan redoslijed (pa ne možemo koristiti poziciju neke vrijednosti kao indeks) niti se vrijednosti mogu identificirati putem kakvog ključa. Zašto bismo onda prikupljali vrijednosti u skupove? Skupovi omogućuju matematičke operacije sa skupovima poput unije, presjeka i razlike, odnosno operacije koje su vrlo korisne u radu s podacima. Pogledajmo primjere:
-
-\begin{python}{Operacije sa skupovima}{listing:set_operacije}
->>> a.intersection(b)  # ili a & b
-{"c", "b"}
->>> a & b  # isto što i a.intersection(b)
-{"c", "b"}
->>> a.union(b)  	   # ili a | b
-{"a", "d", "c", "b"}
->>> a.difference(b)    # ili a - b
-{"a"}
->>> b.difference(a)    # ili b - a
-{"d"}
-\end{python}
-
-Također, svojstvo skupa da sadrži samo različite vrijednosti je često korisno. Sljedeći primjer prikazuje kako ga možemo jednostavno iskoristiti da prebrojimo sve jedinstvene vrijednosti u nekoj zbirci vrijednosti.
-
-\begin{python}{Skupovi i prebrojavanje jedinstvenih vrijednosti}{listing:set_jedinstvene_vrijednosti}
->>> boje = ["crvena", "plava", "crvena", "zelena", "plava"]
->>> skup_boja = set(boje)
->>> print("N boja:", len(boje))
-N boja: 4
->>> print("N različitih boja:", len(skup_boja))
-N različitih boja: 3
-\end{python}
-
-Prikazane strukture podataka izvrsan su prvi susret s temom i već samo prikazani koncepti nas opunumoćuju ne samo u programiranju već i u općenitom radu s podacima kao i u razumijevanju vezane tematike. U idućem poglavlju je upravo riječ o osnovama korištenja ovih struktura za obradu podataka.
