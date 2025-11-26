@@ -1,0 +1,79 @@
+\subsection{Pogodi broj}
+
+Implementirajmo još jedan jednostavan program: igru "pogodi broj." Zamislimo prvo ovu igru kao da je igraju dvije osobe. Jedan igrač tajno odabire broj u nekom rasponu, na primjer između jedan i sto. Drugi igrač zatim pokušava pogoditi broj tako što kaže neki broj koji je prvi igrač mogao odabrati i kaže ga prvom igraču. Prvi igrač tada odgovara s "Točno!" ukoliko je drugi igrač pogodio broj ili s "Ne, odabrani broj je veći." ili "Ne, odabrani broj je manji." kako bi dao drugom igraču dodatne informacije za pogađanje broja.
+
+Kako ovo isprogramirati? Korisno je prvo riječima opisati najjednostavniji oblik ovog programa.
+
+\begin{enumerate}
+    \item program mora odabrati slučajan broj u određenom rasponu
+    \item program mora obavijestiti korisnika o tome u kojem rasponu se traži broj
+    \item korisnik mora unijeti neki broj
+    \item program mora provjeriti da li je taj broj odabrani broj i zatim:
+    \begin{enumerate}
+          \item ako je korisnik pogodio broj, ispisati mu da je uspješno završio igru
+          \item ako korisnik nije pogodio broj, ispisati mu da li je traženi broj veći ili manji i zatražiti ga da unese novi broj
+    \end{enumerate}
+    \item koraci 3. i 4. se moraju ponavljati sve dok korisnik ne uspije pogoditi broj
+\end{enumerate}
+
+Kao što vidimo, u ovom programu potrebna nam je mogućnost odabira nekog slučajnog broja. Ovo je česta potreba u programiranju pa većina operativnih sustava i programskih jezika uključuje ovu mogućnost. Za vježbu, pokušajte sami pronaći kako s Pythonom generirati slučajan cijeli broj. Ovakve potrebe, naime, ne valja učiti na pamet već se potrebno moći sam snaći pretraživanjem dokumentacije ili weba.
+
+\textbf{Pokušajte sami implementirati opisani program prije no što nastavite čitati skriptu!}
+
+\newpage
+
+\pythonfile{Pogodi broj 1 - najjednostavnije rješenje}{listing:pogodi_broj_1}{code_python_osnove/ex_guess_number/simple.py}
+
+Kada pokrenemo prikazani program i unosimo brojeve sve dok ne pogodimo traženi broj ispis izgleda otprilike ovako:
+
+\begin{pythonp}{\ref{listing:pogodi_broj_1}}
+Pogodi broj između 1 i 100.
+Pogodi broj: 50
+Nije točno! Broj je veći.
+Pogodi broj: 75
+Nije točno! Broj je veći.
+Pogodi broj: 87
+Nije točno! Broj je veći.
+Pogodi broj: 95
+Nije točno! Broj je veći.
+Pogodi broj: 97
+Nije točno! Broj je manji.
+Pogodi broj: 96
+BRAVO!
+\end{pythonp}
+
+
+Kao što vidimo, u Pythonu je odabir slučajnih brojeva potpomognut standardnim modulom \mintinline{python}{random}\index{modul!random}. Funkcija za odabir slučajnih cijelih brojeva zove se \mintinline{python}{randint} i njeno korištenje za odabir slučajnog broja između 1 i 100 izgleda ovako: \mintinline{python}{n = random.randint(1, 100)}. Ova funkcija uključuje obje granice kao mogući rezultat, odnosno u prijašnjem slučaju mogu se odabrati i \mintinline{python}{1} i \mintinline{python}{100}. Naravno, ovo su detalji koje također nije potrebno znati na pamet, jednostavno je previše toga i detalji se mogu razlikovati među programskim jezicima. Sjetite se da ako nas zanimaju detalji vezani za tu funkciju, to možemo lako dobiti tako što u Python komandnu liniju uvezemo modul random s \mintinline{python}{import random}, a zatim izvršimo \mintinline{python}{help(random.randint)}.
+
+U svakom slučaju, ovo je relativno jednostavan program koji opet demonstrira mogućnosti petlje \mintinline{python}{while}\index{petlja!while}. Vježbe radi, doraditi ćemo ga kako bi demonstrirali razlike između petlji \mintinline{python}{for} i \mintinline{python}{while}. Program sada korisniku dopušta pogađanje broja bilo koji broj puta. Kako doraditi program da dopušta samo određen broj pokušaja? Drugim riječima, ako korisnik prebaci, na primjer, pet ili deset pokušaja, program mu treba javiti da nije uspio pogoditi broj u dozvoljenom broju pokušaja i završiti igru. 
+
+Pokušajte sami implementirati ovu nadogradnju.
+
+Rješenje koje koristi petlju \mintinline{python}{while} bi moglo izgledati ovako. Korisniku smo u ispisu prikazali i broj pokušaja.
+
+\pythonfile{Pogodi broj 2 - ograniči pokušaje petljom while}{listing:pogodi_broj_2}{code_python_osnove/ex_guess_number/limit_tries_while.py}
+
+Ovo možemo riješiti i petljom \mintinline{python}{for}\index{petlja!for}. Sada naime, znamo da kod želimo ponoviti točno n puta (dozvoljen broj pokušaja) što pogoduje korištenju petlje while. Prikazano je i dobar primjer za korištenje mogućnosti \mintinline{python}{for ... else}.
+
+\pythonfile{Pogodi broj 2 - ograniči pokušaje petljom for}{listing:pogodi_broj_3}{code_python_osnove/ex_guess_number/limit_tries_for.py}
+
+Rješenje petljom \mintinline{python}{for} ima par linija kôda manje i nekima može biti elegantnije. U ovom slučaju svejedno je koji pristup odaberemo pa je najbolje odabrati onaj koji nam je samima najlogičniji. U oba slučaja program će se ponašati identično i njegovo izvršavanje može proizvesti sljedeći ispis:
+
+\begin{pythonp}{\ref{listing:pogodi_broj_2} i \ref{listing:pogodi_broj_3}}
+Pogodi broj između 1 i 100.
+Pogodi broj (pokušaj 1/5): 50
+Nije točno! Broj je veći.
+Pogodi broj (pokušaj 2/5): 75
+Nije točno! Broj je veći.
+Pogodi broj (pokušaj 3/5): 87
+Nije točno! Broj je veći.
+Pogodi broj (pokušaj 4/5): 94
+Nije točno! Broj je manji.
+Pogodi broj (pokušaj 5/5): 90
+Nije točno! Broj je veći.
+Nisi uspio pogoditi traženi broj u dozvoljenom broju pokušaja!
+\end{pythonp}
+
+Ovaj program je sada više-manje gotov. 
+
+% todo razlike while for, i spajanje tekst! -> tekst!

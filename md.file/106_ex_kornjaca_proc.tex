@@ -1,0 +1,106 @@
+
+\subsection{Programiranje s kornjačom}
+
+"Kornjača"\index{kornjača} je alat za učenje programiranja koji se koristio u jeziku Logo još kasnih 1960-ih. Python uključuje ovaj alat kao standardni modul. Koncept je sljedeći: postoji kornjača koju možemo kretati kroz dvodimenzionalni prostor s jednostavnim naredbama poput "odi naprijed 50 piksela" ili "skreni lijevo za 45 stupnjeva". Kornjača se najčešće prikazuje kao strelica, a vrlo je lako s njom početi eksperimentirati i interaktivno.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Interaktivan rad s kornjačom}
+    \label{fig:turtle_idle}
+    \includegraphics[width=\textwidth]{turtle_idle}
+\end{figure}
+
+Kornjača živi u modulu \mintinline{python}{turtle}\index{modul!turtle}, a prozor u kojem je vizualizacija se može pokrenuti s naredbom \mintinline{python}{turtle.showturtle()}. Osnovne naredbe za kretanje kornjače su \mintinline{python}{turtle.forward(distance)}, gdje je \mintinline{python}{distance} udaljenost za koju će se kornjača pomaknuti u smjeru u kojem je orijentirana, te \mintinline{python}{turtle.left(angle)} i \mintinline{python}{turtle.right(angle)}, gdje je \mintinline{python}{angle} broj stupnjeva za koji će kornjača promijeniti orijentaciju u lijevo ili desno. Kada program pišemo u datoteku, dobro dođe i naredba \mintinline{python}{turtle.done()} koja pokreće kornjaču kao aplikaciju koja čeka korisnički unos. Ovo je korisno i već ako samo želimo spriječiti da se prozor zatvori čim se program završi, kao što smo to ranije radili naredbom \mintinline{python}{input("Pritisni <enter> za kraj")}.
+
+Također, možemo modificirati i razne postavke kornjače kao što su brzina crtanja, debljina i boja linije i oblik kornjače. U ovom smislu najvažniji su nam brzina kornjače kako bi lakše mogli vidjeti što se zbiva i debljina linije, kako bi lakše vidjeli što je kornjača nacrtala. Brzinu kornjače možemo postaviti s funkcijom \mintinline{python}{turtle.speed(n)} gdje je je n broj od jedan do deset, a jedan je najsporije kretanje. Debljinu linije možemo postaviti s funkcijom \mintinline{python}{turtle.width(n)} gdje je n broj piksela.
+
+% TODO ZADATAK
+Imajući to na umu probajte implementirati program u kornjači koji crta kvadrat. Pokušajte napisati ovaj program prije no što nastavite čitati skriptu!
+
+\newpage
+
+Najjednostavnije rješenje ovog problema je kako slijedi:
+
+
+\pythonfile{Kornjača i kvadrat 1}{listing:turtle_poly_1}{code_python_osnove/ex_turtle_poly/poly_1.py}
+
+\begin{figure}[H]
+    \centering
+    \caption{Rezultat programa Kornjača i kvadrat 1}
+    \label{fig:turtle_square}
+    \includegraphics[width=0.5\textwidth]{turtle_square}
+\end{figure}
+
+Ovo rješenje radi što treba, ali je strukturalno loš program. Prvi problem je što se dvije posve iste naredbe, odnosno naredbe koje se sastoje od poziva na iste funkcije s istim parametrima, se u paru ponavljaju četiri puta. Kada krenemo na ovaj način ponavljati naredbe to je signal da možemo iskoristiti petlju. Također, ulazne vrijednosti za izvršenje programa se ponavljaju u samim pozivima za funkcije što ih čini težim za uočiti i mijenjati, a tako je i lakše tako napraviti grešku u kôdu. Na primjer, kada bismo željeli promijeniti dužinu stranice, morali bismo to učiniti na četiri različita mjesta u programu, a riječ je o banalno jednostavnom primjeru. Pogledajmo rješenje koje te vrijednosti izdvaja ranije kako bi njima bilo lakše baratati te koristi petlju za izbjegavanje ponavljanja kôda.
+
+
+\pythonfile{Kornjača i kvadrat 2}{listing:turtle_poly_2}{code_python_osnove/ex_turtle_poly/poly_2.py}
+
+Na ovaj način jasno su nam odvojeni podaci i proces samog crtanja, a proces crtanja ne samo da izbjegava ponavljanje kôda već i omogućuje laku promjenu broja koraka kornjače. To ne samo da nam olakšava promjene ovog programa, već nam i otvara nove mogućnosti. 
+
+\begin{important}{Ponavljajte petljom i odvojite podatke od logike}
+Izbjegavajte ponavljanje istih naredbi dupliciranjem. Tome služi petlja. Također, odvajajte podatke od logike jer ih je tako lakše kasnije saznati i mijenjati. Navedeno olakšava održavanje i promjene te umanjuje mogućnost pogrešaka u većim programima.
+\end{important}    
+
+U postavkama sada možemo namjestiti crtanje bilo kojeg pravilnog poligona. Pogledajmo primjere za trokut i heksagon.
+
+% TODO python raw environment, python coloring but no line numbers and no numbering and toc
+\begin{pythonp}{Kornjača i trokut}
+# ...
+n_steps = 3       # broj koraka koji će kornjača napraviti
+turn_angle = 120  # stupanj pod kojim se skreće
+# ...
+\end{pythonp}
+
+\begin{figure}[H]
+    \centering
+    \caption{Rezultat programa Kornjača i trokut}
+    \label{fig:turtle_triangle}
+    \includegraphics[width=0.5\textwidth]{turtle_triangle}
+\end{figure}
+
+\begin{pythonp}{Kornjača i heksagon}
+# ...
+n_steps = 6      # broj koraka koji će kornjača napraviti
+turn_angle = 60  # stupanj pod kojim se skreće
+# ...
+\end{pythonp}
+
+\begin{figure}[H]
+    \centering
+    \caption{Rezultat programa Kornjača i heksagon}
+    \label{fig:turtle_heksagon}
+    \includegraphics[width=0.5\textwidth]{turtle_hex}
+\end{figure}
+
+Dapače, ukoliko razmislimo i prisjetimo se malo rudimentarne trigonometrije (ili pronađemo formule \textit{online}), stupanj skretanja možemo automatski izračunati iz broja stranica čime više ni tu vrijednost nije potrebno namještati. Dorađeni program, koji se u potpunosti bazira na poligonima i napustio je koncept kvadrata vidimo niže.
+
+\pythonfile{Kornjača i poligon 1}{listing:turtle_poly_3}{code_python_osnove/ex_turtle_poly/poly_3.py}
+
+Program je sada postavljen da crta pravilne poligone bilo kojeg broja stranica. Ima međutim još jedan problem, unosi su postavljeni tako da čim je veći broj stranica, tim je veći i poligon ukoliko sami ne promijenimo dužinu stranice. Navedeno je vidljivo i u ovome tekstu u razlici u veličini između prikazano trokuta i heksagona, a kako raste broj stranica, tako raste i veličina. Na slici \ref{fig:turtle_big_poly} vidimo poligon koji je pobjegao s ekrana.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Interaktivan rad s kornjačom}
+    \label{fig:turtle_big_poly}
+    \includegraphics[width=0.75\textwidth]{turtle_big_poly}
+\end{figure}
+
+Što ukoliko želimo da nam svi poligoni imaju istu veličinu bez ručnog podešavanja dužine stranice? Obzirom da su nam ulazne vrijednosti u kôdu izdvojene, navedeno možemo promijeniti trigonometrijskim izračunima radije no promjenama u toku programa. Možemo, na primjer, postaviti da je radijus, a ne dužina stranice, osnovna ulazna vrijednost. Dužinu stranice možemo zatim izračunati. Pogledajmo kako.
+
+\pythonfile{Kornjača i poligon 2}{listing:turtle_poly_4}{code_python_osnove/ex_turtle_poly/poly_4.py}
+
+Dodali smo samo formulu za izračun dužine stranice iz radijusa. Na ovaj način kad crtamo poligone istog radijusa, oni ne rastu s brojem stranica. Dok ovaj kod prikazuje svrsishodnu upotrebu trigonometrije u programiranju, za potrebe učenja programiranja nam je ovdje najvažnije da smo dobrom strukturom, odnosno korištenjem petlje i jasnim odvajanjem ulaznih podataka od samih naredbi, razvili općenit postupak crtanja poligona, a krenuli smo od koncepta kvadrata. Sada kad smo razvili postupak, crtanje poligona bi mogli definirati kao zasebnu funkciju čime bi omogućili crtanje poligona kroz jednu naredbu. Obzirom da je ovo vrlo važno za programiranje iole kompleksnijih programa, naučiti ćemo to kasnije u ovom tekstu, ali pogledajmo prvo još koji primjer koji se koristi znanjem koje smo već usvojili.
+
+Također, vrijedi spomenuti da smo ovdje prikazali samo najosnovnije mogućnosti kornjače pa ćemo se na to još vratiti, ali ako netko želi eksperimentirati s kornjačom više neka se referira na \href{https://docs.python.org/3.8/library/turt le.html}{službenu dokumentaciju}. Čitanje dokumentacije i traženje odgovora \textit{online} je i dobra vježba jer se radi o nezaobilaznom koraku prilikom programiranja, a na čitanje dokumentacije se treba naviknuti (i to pogotovo kada se radi o službenoj dokumentaciji jer je često pisana tehničkim jezikom) pa je dobro početi s vježbom. 
+
+Također, s kornjačom se mogu raditi kojekakve čudesne i uglavnom beskorisne stvari. Programiranje radi umjetnosti. Ukoliko smo Python instalirali prema uputama iz ove skripte i u komandnoj liniji pokrenemo naredbu \mintinline{python}{python -m turtledemo} pokrenuti će nam se grafičko sučelje koje prikazuje napredne primjere i mogućnosti kornjače. Ukoliko, na primjer, iz padajućeg izbornika "examples" odaberemo primjer "bytedesign" te kliknemo na "start", dobiti ćemo sliku \ref{fig:turtle_examples}.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Napredni primjeri mogućnosti s kornjačom}
+    \label{fig:turtle_examples}
+    \includegraphics[width=\textwidth]{turtle_examples}
+\end{figure}
+
+Ipak, ovi primjeri su uglavnom napredni i koriste mnoge koncepte koje još nismo objasnili pa u njih nećemo sada dublje ulaziti. Ovdje su spomenuti jer prikazuju mogućnost programiranja radi kreativnog procesa radije no pragmatične vrijednosti programa.

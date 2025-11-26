@@ -1,0 +1,423 @@
+
+% TODO rezervirane riječi, provjeri da je sve spomenuto kod definicije varijabli
+
+\section{Radnje: Izjave, izrazi, operatori, funkcije i metode}\label{radnje}
+
+Osnovna namjena programiranje je reći računalu što da \emph{radi}. Ono što nam je posebno zanimljivo u definiciji sastavnih dijelova programskog kôda je vrlo svrsishodna podjela na radnje i podatke.
+
+Programi se, slobodno govoreći, sastoje od \emph{radnji}\index{radnja} i od \emph{podataka}\index{podaci}. Zapravo, obzirom da je program zapisan na računalo, cijeli zapis program se sastoji od podataka pa na nekim razinama ova distinkcija ne funkcionira. Dapače, velik napredak u povijesti računarstva je prelazak na "programe pohranjene kao podatke". Ipak, ova podjela nam je vrlo korisna za učenje i razumijevanje suvremenog programiranja. Radnje se provode putem posebnih riječi koje tvore osnovu programskog jezika, \textit{operatora} te putem \textit{funkcija} i \textit{metoda}.
+
+% CONTENT: Poveznica između radnji i vrsti podataka
+Većina radnji ovisi o vrsti podataka. Koje radnje možemo obavljati s kojim podacima? Radnja \mintinline{python}{print} je univerzalna, bilo koju vrstu podataka možemo ispisati na ekran iako katkad taj ispis korisniku neće imati smisla. Programi su sami po sebi tekst, pa se sve može pretvoriti u tekst. Što je s ostalim radnjama? Jasno je da možemo zbrojiti dva broja, ali da li možemo zbrajati tekst? A tekst i broj? Probajte u IDLE-u izvršiti sljedeće izraze: \mintinline{python}{16 + 26}, \mintinline{python}{'a' + 'b'} i \mintinline{python}{'z' + 42}. Da li su se svi izrazi uspješno izvršili? Zašto?
+
+Važno je dakle uočiti da radnje koje možemo provesti s nekim podacima ovise o \emph{vrsti tih podataka}\index{vrsta podataka}. Upravo je u poglavljima \ref{podaci_vrste} i \ref{podaci_tekst} riječ o osnovnim vrstama podataka i radnjama s njima jer bez tog znanja ne možemo smisleno pristupiti programiranju. Ipak, prije no što krenemo na to, upoznajmo se s osnovnim načinima zadavanja radnji računalu putem programskog jezika Python. Vrijedi znati i da se ti načini mogu generalizirati i na mnoge druge programske jezike, pa vrijede općenito za programiranje iako se detalji među jezicima razlikuju.
+% ----
+
+
+\subsection{Izjave i izrazi}
+
+Najosnovniji element imperativnih jezika je \textit{izjava}\index{izjava} (eng. \textit{statement}). Izjava služi zadavanju onoga što smatramo jednom naredbom za provođenje neke radnje. Ta naredba može biti i kompleksna, odnosno može se sastojati od više podređenih radnji. Neke izjave su posebne riječi propisane programskim jezikom, a neke su \textit{izrazi}. Izraz\index{izraz} (eng. \textit{expression}) je kombinacija radnji i podataka iz koje možemo izračunati neku vrijednost. Programerski žargon ovdje kopira matematički pa se kaže da se izrazi \textit{evaluiraju}\index{evaluacija} čime se izračunava vrijednost izraza. Izrazi se u načelu sastoje od operatora i operanada, ali sadrže i druge koncepte kao sastavne dijelove što je to funkcija. Pogledajmo primjere:
+
+
+\begin{python}{Izjave i izrazi}{listing:statements_expression}
+>>> 17 + 25
+42
+>>> n = 17 + 25
+>>> if n % 2 == 0:  # da li je ostatak cijelobrojnog dijeljenja jednak nuli
+    print('broj je paran')
+else:
+    print('broj je neparan')
+
+
+broj je paran
+>>> x = round(3.14)
+\end{python}
+
+U retku 1 vidimo jedan izraz, \mintinline{python}{17 + 25}. Ovaj izraz se sastoji od operatora \mintinline{python}{+} te dva cijela broja kao operanada, \mintinline{python}{17} i \mintinline{python}{25}. Ovaj izraz također tvori i jednu izjavu koju u engleskom programskom žargonu nazivamo \textit{expression statement}. Redak 2 je rezultat evaluacije ovog izraza.
+
+U retku 3 nalazi se jedna jednostavna izjava\index{izjava!jednostavna}, ova izjava sadrži izraz \mintinline{python}{17 + 25} te dodjelu rezultata ovog izraza varijabli \mintinline{python}{n}. U ovoj izjavi prvo se evaluira izraz te se zatim rezultat izraza dodjeljuje varijabli \mintinline{python}{n}. Dakle, nakon evaluacije izraza s desne strane, izvršava se \mintinline{python}{n = 42}. Dodjela varijabli se ne smatra izrazom jer nema rezultat, to je jednostavno dodjela "imena" rezultatu izraza, odnosno pridruživanje rezultata izraza varijabli \mintinline{python}{n}.
+
+Pod jednostavne izjave smatramo one koje se logički pišu u jedan redak\footnote{Termin "logički pišu" se koristi zato jer je jedan redak moguće podijeliti u više koristeći se posebnom sintaksom, kao i više redaka spojiti u jedan. Ovo se međutim smatra lošom praksom u pisanju kôda.}. Pored jednog ili više izraza, te izjave mogu sadržavati i posebne konstrukte poput pridruživanja vrijednosti varijabli te drugih izjava zadanih posebnim riječima koje propisuje Python. Ovih riječi nema puno, rijetko se mijenjaju i u Pythonu 3 uključuju: \mintinline{python}{assert}, \mintinline{python}{pass}, \mintinline{python}{del}, \mintinline{python}{return}, \mintinline{python}{yield}, \mintinline{python}{raise}, \mintinline{python}{break}, \mintinline{python}{continue}, \mintinline{python}{import}, \mintinline{python}{global} i \mintinline{python}{nonlocal}. Obzirom da se radi o specijaliziranim "naredbama", s većinom ovih izjava ćemo se upoznavati kasnije u tekstu kada nam teme i znanje dozvole da ih kvalitetno obradimo.
+
+U retku 4 započinje složena izjava\index{izjava!složena} \mintinline{python}{if} koja završava u retku 7. Rezultat izvršavanja ove izjave možemo vidjeti u retku 10. Ovu izjavu možemo pročitati na sljedeći način: ako je n paran broj, tada na ekran ispiši tekst "broj je paran", a ako nije, tada ne ekran ispiši tekst "broj je neparan". U retku 4, prvo se evaluira izraz \mintinline{python}{n \% 2}. Kao što je opisano u pregledu aritmetičkih operatora, operator \mintinline{python}{%} vraća ostatak cjelobrojnog dijeljenja. Nakon toga se evaluira izraz koji provjerava da li je rezultat jednak nuli, odnosno u ovom slučaju \mintinline{python}{0 == 0}. Evaluacija tog izraza je vrijednost \mintinline{python}{True} što rezultira time da se izvršava redak 5, a ne redak 7. Sve navedeno tvori jedan kondicional što je pobliže opisano u poglavlju \ref{kondicionali}.
+
+Složene izjave sadrže više komponenata i logički se pišu u više redaka. Tako, na primjer, izjava \mintinline{python}{if} sadrži i komponentu \mintinline{python}{else}. U Pythonu, složenih izjava ima još manje nego jednostavnih te one služe kontroli toka (\mintinline{python}{if}, \mintinline{python}{while}, \mintinline{python}{for} i \mintinline{python}{try}), definiciji vlastitih funkcija i klasa (\mintinline{python}{def} i \mintinline{python}{class}) te radu s korutinama {\mintinline{python}{async}}. Kontrola toka se obrađuje u poglavlju \ref{kontrola_toka}, definicija funkcija i klasa u dijelu \ref{abstrakcija}, a korutine nisu obrađene u ovoj knjizi.
+
+Vrijedi i napomenuti da je složene izjave relativno nepraktično izvršavati u komandnoj liniji pa ćemo ih rijetko viđati u primjerima koji se koriste komandnom linijom.
+
+U retku 11 primjera \ref{listing:statements_expression} vidimo izjavu koja se sastoji od poziva na funkciju \mintinline{python}{round} putem oblih zagrada unutar kojih se nalaze parametri za tu funkciju. U ovom slučaju, funkcija prima jedan parametar, broj \mintinline{python}{3.14}. Poziv na tu funkciju čini jedan izraz, a rezultat se pridružuje varijabli \mintinline{python}{x}.
+
+Sada kad razumijemo osnovne koncepte u zadavanju naredbi u programskim jezicima, odnosno izjave i izraze, pogledajmo pobliže detalje korištenja operatora i funkcija jer su oni najosnovniji elementi provođenja radnji putem programskih jezika.
+
+
+\subsection{Operatori}
+
+Operatori\index{operator} su najjednostavniji način provođenja radnji u programiranju, a mnogi su nam poznati iz matematike (npr. \mintinline{python}{+} i \mintinline{python}{-}) čak i ako nemamo iskustva s programiranjem. Operatora ima relativno mali broj i možemo ih svrstati u nekoliko skupina koje su opisane u nastavku. Oni su tipično neki simbol, ali mogu biti i više simbola (poput \mintinline{python}{!=}) ili pak riječi (poput \mintinline{python}{in} ili \mintinline{python}{and}). Uvijek su kratki za zapisati, ali ono što ih čini operatorima je stil njihova korištenja, a ne dužina u broju znakova. Također, operatora postoji relativno mali broj i svi mogući operatori su unaprijed određeni samim propisom programskog jezika. Drugim riječima, nije moguće definirati vlastite operatore.
+
+Operatori se pišu između dvije vrijednosti ili varijable s kojima će se provoditi radnja kao, na primjer, u izrazu \mintinline{python}{x + y}. U tom izrazu znak \mintinline{python}{+} je operator, a varijable \mintinline{python}{x} i \mintinline{python}{y} su operandi, odnosno vrijednosti s kojima se izvršava radnja naznačena operatorom.
+
+Operande najčešće odvajamo razmacima od operatora. Striktno govoreći, korištenje razmaka nije nužno u slučajevima kada je operator neki poseban simboli opcionalno (na primjer, \mintinline{python}{x * y} i \mintinline{python}{x*y} su ekvivalentni izrazi), ali kada je operator riječ, isto ne vrijedi jer se tada isti ne može razlikovati od imena varijable. Na primjer, \mintinline{python}{a and b} je validan izraz, ali \mintinline{python}{aandb} nije već se referira na jednu varijablu koja se zove "aandb". Kao dobar stil pisanja kôda, dakle, preporuča se uvijek stavljati razmake prije i poslije operatora čak i kada sintaksa to ne zahtijeva.
+
+Slijedi pregled najčešćih operatora u Pythonu. Svrha ovog dijela je dati pregled operatora, ne podrobno objasniti korištenje svakog. Većina ovih operatora će se detaljnije objasniti kasnije u tekstu tamo gdje to najviše odgovara gradivu, a na ove tablice se uvijek možete vratiti kao referencu.
+
+\subsubsection{Pridruživanje vrijednosti varijabli}
+
+Daleko najčešći operator koji ćemo koristiti u kôdu je \emph{operator za pridruživanje vrijednosti varijabli}\index{operator!pridruživanje vrijednosti}. To je operator \mintinline{python}{=}. Važno je zapamtiti da ovaj operator ne provjerava jednakost (tome služi operator \mintinline{python}{==}), već dodjeljuje vrijednosti nekoj varijabli. U Pythonu stoji i ideja da ovime dodjeljujemo imena različitim vrijednostima kako bi se na njih kasnije mogli referirati. To će često biti vrijednosti koje ne znamo za vrijeme pisanja programa kao što je to slučaj kada korisnika zatražimo unos funkcijom \mintinline{python}{input}.
+
+
+\begin{python}{Pridruživanje vrijednosti varijabli}{listing:pridruzivanje_vrijednosti}
+>>> x = 16  # pridruži vrijednost 16 novoj varijabli x
+>>> y = 26  # pridruži vrijednost 26 novoj varijabli y
+>>> x + y  # rezultat ovog izračuna nismo pridružili niti jednoj varijabli
+42
+>>> z = x + y  # definiraj novu varijablu z kako bi se kasnije mogao pozvati na rezultat
+>>> print(z)  # pozovi se na vrijednost varijable z
+42
+>>> z = y - x  # pridruži novu vrijednost varijabli z
+>>> print(z)  # pozovi se na vrijednost varijable z
+10
+
+>>> text = input("Upiši neki tekst: ")  # pridruži korisnički unos varijabli "text"
+Upiši neki tekst: neću
+>>> print(text)  # varijabla text se sada referira na što god da je korisnik upisao
+'neću'
+\end{python}
+
+
+Važno je primijetiti da su nam varijable nužne kako bi programirali. Egzaktne vrijednosti vrlo često nisu poznate za vrijeme pisanja programa. Na primjer, varijabla \mintinline{python}{text} se referira na rezultat izvršavanja funkcije \mintinline{python}{input}, odnosno na koji god tekst da je korisnik upisao. Bez korištenja te varijable ne bismo imali načina da se pozovemo na korisnički unos koji može biti bilo što.
+
+
+\subsubsection{Aritmetički operatori}
+
+Operatori koji su nam najpoznatiji su operatori iz osnova matematike. To su aritmetički operatori\index{operator!aritmetički} i najčešće se koriste s brojevima, ali neki se mogu koristiti i s drugim vrstama vrijednosti, kao što ćemo vidjeti u idućem poglavlju. Pregled je vidljiv u tablici \ref{tab:operatori-aritmetika}.
+
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{Aritmetički operatori}
+        \label{tab:operatori-aritmetika}
+        \begin{tabular}{llll}
+        	\textbf{operator} & \textbf{operacija}              & \textbf{primjer} & \textbf{rezultat} \\ \hline
+        	$\boldsymbol{+}$  & zbrajanje                       &    $7\:+\:2$     & 9                 \\
+        	$\boldsymbol{-}$  & oduzimanje                      &    $7\:-\:2$     & 5                 \\
+        	$\boldsymbol{*}$  & množenje                        &    $7\:*\:2$     & 14                \\
+        	$\boldsymbol{**}$ & potenciranje                    &    $7\:**\:2$    & 49                \\
+        	$\boldsymbol{/}$  & dijeljenje                      &    $7\:/\:2$     & 3.5               \\
+        	$\boldsymbol{//}$ & cjelobrojno dijeljenje          &    $7\://\:2$    & 2                 \\
+        	$\boldsymbol{\%}$ & ostatak cjelobrojnog dijeljenja &    $7\:\%\:2$    & 1
+        \end{tabular}
+    \end{center}
+\end{table}
+
+
+Zanimljivost kod aritmetičkih operatora je da se svi mogu spojiti s operatorom za pridruživanje vrijednosti varijabli (tj. \mintinline{python}{=}) kako bi se skratilo pisanje izraza poput \mintinline{python}{x = x + 1} u \mintinline{python}{x += 1}. Drugim riječima, možemo u isto vrijeme odraditi aritmetičku operaciju i rezultat pridružiti varijabli. Ovo je najlakše objasniti primjerom \ref{listing:dodjeljivanje_aritmetika}.
+
+
+\begin{python}{Skraćeno izvršavanje aritmetičkih operacija i pridruživanja varijabli}{listing:dodjeljivanje_aritmetika}
+>>> x = 1
+>>> x = x + 2  # zbroji x i 2 pa pridruži novu vrijednost varijabli x
+>>> print(x)   # x sada ima novu vrijednost, nije više 1
+3
+>>> x += 2  # isto što i x = x + 2 samo kraće za pisati
+>>> print(x)
+5
+>>> x *= 2  # isto što i x = x * 2 samo kraće za pisati
+>>> print(x)
+10
+>>> x /= 2 # isto što i x = x / 2
+>>> print(x)
+5.0
+\end{python}
+
+
+\subsubsection{Operatori za usporedbu}
+
+Osim aritmetičkih operacija, vrijednosti često  uspoređujemo\index{operator!usporedba}. Sve vrijednosti možemo međusobno provjeriti da su jednake koristeći se operatorom \mintinline{python}{==} ili nejednake koristeći se operatorom \mintinline{python}{!=}. Kod vrijednosti koje podržavaju sortiranje možemo još i provjeravati da li su veće ili manje od drugih vrijednosti. Operatore za usporedbu možemo vidjeti na tablici \ref{tab:operatori-usporedba}.
+
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{Operatori za usporedbu}
+        \label{tab:operatori-usporedba}
+        \begin{tabular}{llll}
+        	\textbf{operator}   & \textbf{operacija} & \textbf{primjer} & \textbf{rezultat} \\ \hline
+        	$\boldsymbol{==}$   & jednako            & $7\:==\:2$       & False             \\
+        	$\boldsymbol{!\!=}$ & nejednako          & $7\:!\!=\:2$     & True              \\
+        	$\boldsymbol{<}$    & manje              & $7\:<\:2$        & True              \\
+        	$\boldsymbol{<\!=}$ & manje ili jednako  & $7\:<\!=\:2$     & True              \\
+        	$\boldsymbol{>}$    & veće               & $7\:>\:2$        & False             \\
+        	$\boldsymbol{>\!=}$ & veće ili jednako   & $7\:>\!=\:2$     & False
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Logički operatori}
+
+
+Različite operacije je često potrebno i logički povezivati\index{operator!logički}. Na primjer provjeravati da je više uvjeta zadovoljeno ili da je barem jedan od uvjeta zadovoljen. Tome služe logički operatori \mintinline{python}{and}, \mintinline{python}{or} i \mintinline{python}{not} prikazani na tablici \ref{tab:operatori-bool}. Ovi operatori zajedno s operatorima za usporedbu imaju posebno značajnu ulogu kod kondicionala\index{kondicional}, odnosno \textit{if ... then ... else} konstrukcija.
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{Logički operatori}
+        \label{tab:operatori-bool}
+        \begin{tabular}{llll}
+        	\textbf{operator} & \textbf{operacija} & \textbf{primjer}     & \textbf{rezultat} \\ \hline
+        	\textbf{and}      & logičko i          & $7 > 2$ and $7 < 10$ & True              \\
+        	\textbf{or}       & logičko ili        & $7 < 2$ or $7 < 10$  & True              \\
+        	\textbf{not}      & logička inverzija  & not $7\:>\:2$        & False
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Operatori za provjeru članstva}
+
+Često su korisni i operatori za provjeru članstva\index{operator!članstvo}. Ovo su dva operatora koja nam govore da li neki tekst ili struktura podataka sadrži određeni element. Uloga ovih operatora će nam postati puno jasnija kada naučimo strukture podataka, ali za sada primjere možemo pokazati koristeći se tekstom. Operatori za provjeru članstva su prikazani na tablici \ref{tab:operatori-clanstvo}.
+
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{Operatori za provjeru članstva}
+        \label{tab:operatori-clanstvo}
+        \begin{tabular}{llll}
+        	\textbf{operator} & \textbf{operacija} & \textbf{primjer} & \textbf{rezultat} \\ \hline
+        	\textbf{in}       & sadrži             & "a" in "abc"     & True              \\
+        	\textbf{not in}   & ne sadrži          & "a" not in "abc" & False
+        \end{tabular}
+    \end{center}
+\end{table}
+
+
+\subsubsection{Operatori za provjeru identiteta}
+
+Uz provjeravanje jednakosti postoje i operatori za provjeru identiteta koji su vidljivi na tablici \ref{tab:operatori-identitet}. Važno je primijetiti da ovi operatori nisu isto što i provjera jednakosti. Provjera jednakosti provjerava da li se dvije vrijednosti mogu smatrati ekvivalentnima odnosno \textquotedblleft istima\textquotedblright{}, a provjera identiteta provjerava da li se radi o istoj vrijednosti u memoriji računala.
+
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{Operatori za provjeru identiteta}
+        \label{tab:operatori-identitet}
+        \begin{tabular}{llll}
+        	\textbf{operator} & \textbf{operacija}  & \textbf{primjer} & \textbf{rezultat} \\ \hline
+        	\textbf{is}       & je isti objekt      & True is 1        & False             \\
+        	\textbf{is not}   & ne nije isti objekt & True is not 1    & True
+        \end{tabular}
+    \end{center}
+\end{table}
+
+Ovo će početi imati više smisla kada dođemo do objektnog programiranja, ali za sada možemo upotrebu prikazati sljedećim primjerom:
+
+\begin{python}{Provjera jednakosti i operator is}{listing:operator_is}
+>>> True == 1  # True se može smatrati jednakom vrijednosti 1
+True
+>>> True is 1  # True nije posve ista vrijednost u memoriji kao i 1
+False
+\end{python}
+
+
+
+\begin{comment}
+Python Bitwise Operators
+Bitwise operators are used to compare (binary) numbers:
+
+Operator	Name	Description
+%& 	AND	Sets each bit to 1 if both bits are 1
+%|	OR	Sets each bit to 1 if one of two bits is 1
+%^	XOR	Sets each bit to 1 if only one of two bits is 1
+%~ 	NOT	Inverts all the bits
+%<<	Zero fill left shift	Shift left by pushing zeros in from the right and let the leftmost bits fall off
+%>>	Signed right shift	Shift right by pushing copies of the leftmost bit in from the left, and let the rightmost bits fall off
+\end{comment}
+
+\subsubsection{Prioritet izvršavanja operacija}
+
+U ranijim primjerima prikazivali smo samo izraze koji se koriste jednim operatorom. Što se međutim zbiva kada u istom izrazu koristimo više operatora? Na primjer, koliko je \mintinline{python}{2 + 2 * 3}? Kako bismo izračunali taj izraz potreban nam je koncept prioriteta operatora{\index{operator!prioritet}}. Pogledajmo primjer.
+
+\begin{python}{Provjera jednakosti i operator is}{listing:operator_precedence}
+>>> 2 + 2 * 3  # prvo se množi a onda zbraja
+8
+>>> (2 + 2) * 3  # prvo se evaluira operacija u zagradama, a tek onda množi
+12
+\end{python}
+
+Kao što znamo iz matematike, postoji zadani redoslijed izvršavanja operatora. Operacije prema prioritetu operatora. U prethodnom primjeru, operator \mintinline{python}{*} ima veći prioritet od operatora \mintinline{python}{+} pa je prva operacija koja se izvršava operacija \mintinline{python}{2 * 3}. Ukoliko želimo promijeniti taj redoslijed, moramo koristiti zagrade oko jedne operacije (dakle jednog operatora i njegovih operanada). Vrijedi zapamtiti da zagrade nisu nikad greška. Izraz \mintinline{python}{2 + 2 * 3} isti je kao i izraz \mintinline{python}{2 + (2 * 3)}. Drugim riječima, kada nismo sigurni u zadani prioritet operatora, uvijek možemo koristiti zagrade kako bi se osigurali u redoslijed izvršavanja operacija.
+
+Dok se prikazani primjer koristi konceptima koji su nam najvjerojatnije poznati iz matematike, u programskim jezicima to često nije tako jednostavno. Prvi razlog je zato što se radnje ne moraju ponašati po pravilima iz matematike (iako je to najčešći slučaj), a drugi to što u programskim jezicima postoje operatori koji nam nisu poznati iz matematike.
+
+U svakom slučaju, za Python vrijedi kako je navedeno u sljedećem popisu. Operatori zapisani na vrhu popisa imaju najveći prioritet.
+
+\begin{enumerate}
+    \item izrazi u zagradama
+    \item izvršavanje funkcija
+    \item potenciranje (\mintinline{python}{**})
+    \item pretvaranje brojeva u negativne (\mintinline{python}{-x})
+    \item množenje, dijeljenje, cjelobrojno dijeljenje, ostatak (\mintinline{python}{*, /, //, %})
+    \item zbrajanje i oduzimanje (\mintinline{python}{+, -})
+    \item provjera članstva, provjera identiteta i usporedbe(\mintinline{python}{in, not in, is, is not, <, <=, >, >=, !=, ==})
+    \item booleovi operatori (\mintinline{python}{not, and, or})
+\end{enumerate}
+
+Situacija je zapravo nešto kompleksnija, ali ovdje se navode samo koncepti s kojima smo već upoznati. Potpunu tablicu koja definira redoslijed izvršavanja možete pronaći u službenoj \href{https://docs.python.org/3/reference/expressions.html#operator-precedence}{dokumentaciji}.
+
+
+\subsection{Funkcije i metode}
+
+\textit{Funkcije}\index{funkcija} su jedan od osnovnih građevnih blokova u suvremenom programiranju i služe provođenju onoga što percipiramo kao  "jednu radnju" (iako ta radnja može interno prilično kompleksna).
+
+Operatora, dakle, ima relativno mali broj i obavljaju neke osnovne radnje. Drugi način provođenja radnji u programiranju je funkcijama. Funkcija ima vrlo velik broj i obavljaju najrazličitije radnje koje su najčešće znantno kompleksnije od onih koje obavljaju operatori. Već smo vidjeli funkciju koja ispisuje tekst na ekran (\mintinline{python}{print}) i koja pita korisnika za unos (\mintinline{python}{input}). Postoje i mnoge druge funkcije, za sortiranje, zbrajanje svih brojeva u nekom popisu, pristup tekstualnim datotekama, kopiranje i brisanje datoteka, slanje elektroničke pošte i tako dalje. Python s verzijom 3.8 ima 69 ugrađenih funkcija\index{funkcija!ugrađena} vrlo različitih namjena. Ugrađene funkcije su one koje dolaze kao sastavni dio samog jezika i s mnogima od njih ćemo se upoznati kasnije u ovom tekstu, a cijeli popis možete pronaći u službenoj \href{https://docs.python.org/3/library/functions.html}{dokumentaciji}.
+
+Uz ugrađene funkcije, Python dolazi s velikom "knjižnicom"{} proširenja (eng. \textit{add-on} ili \textit{plugin}). Ta proširenja u Pythonu nazivamo \emph{modulima}\index{modul} i detaljnije se obrađuju u poglavlju \ref{moduli}. Za sada nam je važno da moduli donose mnoge dodatne funkcije za matematiku, za rad s različitim vrstama podataka, datotekama, sustavom ili pak slanje elektroničke pošte, da spomenemo samo neke mogućnosti. Osim modula koji dolaze s Pythonom, možemo i preuzeti velik broj modula koje je razvila zajednica. Također, ne samo da možemo definirati vlastite funkcije\footnote{Kao i vrste podataka, metode i module, ali ne i operatore.} nego bez toga nećemo daleko dogurati s programiranjem. Funkcija dakle teoretski ima beskonačno.
+
+Za sada nam je važno naučiti neke temeljne koncepte vezane uz funkcije, a kroz ovaj tekst ćemo se s mnogima i pobliže upoznati gdje to bude svrsishodno. Kada se upoznamo s osnovama, naučiti ćemo i definirati vlastite funkcije.
+
+Svaka funkcija:
+
+\begin{enumerate}
+\item Prima 0 ili više ulaznih vrijednosti, odnosno parametara (koji se često nazivaju i argumenti).
+\item Provodi neke radnje (na temelju ulaznih vrijednosti ako postoje).
+\item Vraća neku vrijednost. Ako rezultat nije relevantan vraća vrijednost \mintinline{python}{None}\footnote{Dok prve dvije točke stoje za sve programske jezike, treća nije univerzalna.}
+\end{enumerate}
+
+Što je dakle funkcija u programskim jezicima? Ulazne vrijednosti za funkciju zovemo \textit{parametri} ili \textit{argumenti}. Python interno koristi engleski izraz \textit{argument}, ali mi ćemo koristiti hrvatski izraz \textit{parametar} jer nam je jeziku prirodniji.
+
+Funkcija može i ne mora primiti parametre, zatim se u funkciji dešavaju određene radnje (npr. zbrajaju se ulazni parametri ili se ispisuju na ekran) i na kraju funkcija vraća neku vrijednost. Funkcija koja zbraja ulazne parametre vraća njihov zbroj kao rezultat. Kod te funkcije, kao i kod većine, rezultat je relevantan i uopće razlog izvršavanja funkcije. Kod funkcije \mintinline{python}{print}, funkcija ispisuje na ekran, a vraća vrijednost \mintinline{python}{None}. Funkcije čija povratna vrijednost nije relevantna vraćaju vrijednost \mintinline{python}{None}. U svakom slučaju, funkcije u Pythonu uvijek imaju povratnu vrijednost.
+
+%  Svaki operator se može zamijeniti funkcijom, ali ne i obratno budući da funkcija ima teoretski beskonačan broj, a za operatore ovo ne bi bilo svrsishodno.
+
+Parametri se pišu u oble zagrade koje kod funkcija i metoda imaju posebno značenje i označavaju naredbu\footnote{koja je tehnički gledano operator} za izvršavanje funkcije. Čak i kada funkcija ne prima nikakve parametre, oble zagrade su potrebne kako bi se funkcija izvršila. U engleskom žargonu često kažemo i da se funkcija "poziva" (eng. \textit{call}), a to rješenje koristi i Python pa ćemo često naići na jezično rješenje da treba "pozvati funkciju", odnosno u engleskoj literaturi "\textit{call a function}", što znači isto što i "izvršiti funkciju". Pogledajmo primjer \ref{listing:funkcija_izvrsavanje}.
+
+
+\begin{python}{Izvršavanje funkcije}{listing:funkcija_izvrsavanje}
+>>> print()  # izvrši funkciju print bez parametara, odnosno ispiši prazan redak
+
+>>> print    # referiraj se na funkciju print bez izvršavanja te funkcije
+<built-in function print>
+>>> print('Ispiši me!')  # izvrši print s jednim parametrom, tekstom "Ispiši me!"
+'Ispiši me!'
+
+>>> x = 1
+>>> x()  # pokušaj izvršiti broj
+Traceback (most recent call last):
+File "<pyshell#3>", line 1, in <module>
+x()
+TypeError: 'int' object is not callable
+\end{python}
+
+Kao što vidimo u zadnjem slučaju, kada pokušamo oblim zagradama izvršiti nešto što nije funkcija dobivamo grešku \mintinline{python}{TypeError: 'int' object is not callable}. U slobodnom prijevodu, greška u vrsti podataka: objekt vrste cijeli broj se ne može pozvati, odnosno nije izvršiv. Navedena greška demonstrira upotrebu ranije opisane terminologije.
+
+\begin{important}{Izvršavanje funkcija}
+Funkcije se pozivaju oblim zagradama. Oble zagrade nakon riječi naznačuju da se neki kôd poziva. Na primjer, \mintinline{python}{print} se jednostavno referira na tu funkciju i ne
+izvršava je. \mintinline{python}{print()} izvršava tu funkciju.
+\end{important}
+
+
+\subsubsection{Pozivanje i parametri}
+
+Funkcije i metode, dakle, provode radnje na temelju ulaznih parametara. Ponekad primaju i nula parametara, ali to je rjeđi i najjednostavniji slučaj. Kako se parametri šalju funkcijama kad ih je više od jedan? Postoje dva načina: pozicijski\index{parametar!pozicijski} ili po imenu\index{parametar!imenovan}. Do sad smo koristili samo pozicijski pristup i slali samo jedan parametar. Pogledajmo funkciju \mintinline{python}{round} koja zaokružuje broj na cijeli ili na određen broj decimala kao primjer funkcije s dva parametra.
+
+
+\begin{python}{Obvezni i opcionalni parametri}{listing:parametri_obveznost}
+>>> pi = 3.1416
+>>> round(pi)  # obavezan parametar, što se zaokružuje, bez toga radnja nema smisla
+3
+>>> round(pi, 2)  # drugi parametar je opcionalan, na koliko decimala
+3.14
+\end{python}
+
+
+Funkcija \mintinline{python}{round}, dakle, uzima jedan obvezan\index{parametar!obvezan} i jedan opcionalan\index{parametar!opcionalan} parametar. U primjeru \ref{listing:parametri_obveznost} smo parametre definirali pozicijski. Prvi parametar je broj koji se zaokružuje, a drugi broj decimala na koji će se zakruživati. Različite funkcije imaju posve različite parametre i njihov broj ovisi o tome što funkcija radi. Kako saznati parametre neke funkcije? Možemo čitati \textit{online} dokumentaciju ili pak iskoristiti ugrađenu funkciju \mintinline{python}{help}.
+
+\subsubsection{Interna dokumentacija i funkcija help}
+
+Ukoliko u Pythonu potražimo pomoć za funkciju \mintinline{python}{round} dobit ćemo sljedeći ispis:
+
+\begin{python}{Pomoć za funkciju round}{listing:help_round}
+>>> help(round)
+"""
+Help on built-in function round in module builtins:
+
+round(number, ndigits=None)
+    Round a number to a given precision in decimal digits.
+
+    The return value is an integer if ndigits is omitted or None.  Otherwise
+    the return value has the same type as the number.  ndigits may be negative.
+"""
+\end{python}
+
+Primijetite razliku između \mintinline{python}{help(round)} i \mintinline{python}{help(round())}. U prvom slučaju ne izvršavamo funkciju \mintinline{python}{round} već se na nju referiramo pa ju funkcija \mintinline{python}{help} prima kao parametar. U drugom slučaju izvršavamo funkciju \mintinline{python}{round} pa će funkcija \mintinline{python}{help} primiti rezultat izvršavanja te funkcije kao parametar, što nije ono što želimo postići.
+
+Redak teksta koji nam opisuje koje parametre prima ova funkcija je \mintinline{python}{round(number, ndigits=None)}. Nju valja čitati ovako: "Funkcija round prima jedan obavezan parametar koji se zove \mintinline{python}{number} te jedan opcionalan parametar \mintinline{python}{ndigits}". Parametar \mintinline{python}{ndigits} je opcionalan zato jer mu je već pridružena vrijednost \mintinline{python}{None}. Svi parametri kojima je već pridružena neka vrijednost su opcionalni i moramo ih definirati samo ukoliko želimo promijeniti unaprijed zadanu vrijednost.
+
+Parametre možemo jednostavno poslati pozicijski u ovu metodu, na prvom mjestu nalazi se \textit{number}, a na drugom, opcionalno, \textit{ndigits}. Vidimo da svaki parametar uz poziciju ima i svoje ime. Ta imena možemo koristiti prilikom pozivanja funkcije kako bi parametre definirali putem imena\index{parametar!imenovan}, a ne pozicije. Pogledajmo primjer:
+
+\begin{python}{Pozicijski i imenovani parametri}{listing:pozicijski_i_imenovani_parametri}
+>>> n = 3.142
+>>> round(number=n)  # bilo koji parametar možemo i imenovati
+3
+>>> round(number=n, ndigits=2)  # sintaksa je ista pridruživanju vrijednosti varijabli
+3.14
+>>> round(ndigits=2, number=n)  # kada su parametri imenovani, pozicija je nebitna
+3.14
+\end{python}
+
+Imenovani parametri su korisni kad želimo preskočiti neki opcionalan parametar i kad funkcije koje koristimo imaju velik broj parametara i želimo osigurati da im nismo zamijenili redoslijed. Korištenje imenovanih parametara često i poboljšava čitljivost kôda, pogotovo kod funkcija koje primaju velik broj ulaznih vrijednosti. Postoje i funkcije koje primaju varijabilan broj parametara i kod kojih moramo koristiti imenovane parametre kako bi postigli određenu funkcionalnost. Kao kompleksniji primjer možemo prikazati naredbu \mintinline{python}{print} koju smo do sada koristili samo u najosnovnijem obliku.
+
+\begin{python}{Pomoć za funkciju print}{listing:help_print}
+>>> help(print)
+Help on built-in function print in module builtins:
+
+print(...)
+    print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+
+    Prints the values to a stream, or to sys.stdout by default.
+    Optional keyword arguments:
+    file:  a file-like object (stream); defaults to the current sys.stdout.
+    sep:   string inserted between values, default a space.
+    end:   string appended after the last value, default a newline.
+    flush: whether to forcibly flush the stream.
+\end{python}
+
+Usredotočimo se za sada samo na parametre funkcije \mintinline{python}{print}. Vidimo novi koncept. Prvi parametar se zove \mintinline{python}{value}, a nakon njega dolazi \mintinline{python}{...}. To znači da možemo poslati bilo koji broj vrijednosti kao parametre za \mintinline{python}{value}. Sve ove vrijednosti će se ispisati na ekran razdvojene razmakom, osim ako nismo naredili drugačije. Pogledajmo primjer:
+
+\begin{python}{Funkcija print s više parametara}{listing:print_vise_parametara}
+>>> print('a', 'b', 'c')
+a b c
+\end{python}
+
+Funkcija \mintinline{python}{print} je u liniji 1 primila tri vrijednosti koje će ispisati, \mintinline{python}{'a', 'b'} i \mintinline{python}{'c'}. Sve tri vrijednosti su ispisane razdvojene razmakom, a na kraju je ispisan znak za prelazak u novi redak. Ove mogućnosti možemo kontrolirati parametrom \mintinline{python}{sep}, koji definira znak koji razdvaja vrijednosti, i parametrom \mintinline{python}{end} koji definira znak koji s kojim se završava ispis. Obzirom da se sve vrijednosti koje pošaljemo pozicijski ispisuju razdvojene znakovima koje definira \mintinline{python}{sep} i završavaju znakovima koje definira \mintinline{python}{end}, kako poslati te parametre? Koristeći se imenima. Pogledajmo primjer.
+
+\begin{python}{Funkcija print s više parametara i definiranim sep i end}{listing:print_sep_end}
+>>> print('a', 'b', 'c', sep=' - ', end=' ...\n')
+a - b - c ...
+>>> print('a', 'b', 'c', sep='\n')
+a
+b
+c
+\end{python}
+
+U prikazanom primjeru, \mintinline{python}{'\n'} se referira na znak za novi redak, što je pobliže opisano u poglavlju o tekstu. Redak 1 prikazuje naredbu koja ispisuje tri vrijednosti i spaja ih sa znakovima razmak, crtica, razmak, a završava ispis sa znakovima razmak, tri točkice i novim retkom. Redak 3 prikazuje naredbu koja koristi znak za novi redak kao \mintinline{python}{sep} pa se svaka vrijednost ispisuje u novom retku.
+
+\subsubsection{Metode}
+
+\textit{Metode}\index{metoda} su posebna vrsta funkcija. To su funkcije vezane za vrste vrijednosti i uvijek rade nešto s vrijednošću za koju su vezane. Pogledajmo razliku između funkcije \mintinline{python}{print}, i metode \mintinline{python}{upper} koju posjeduju vrijednosti vrste tekst, odnosno u Python terminima \mintinline{python}{str}, i koja pretvara sva mala slova u velika.
+
+\begin{python}{Funkcija vs. metoda}{listing:funkcija_vs_metoda}
+>>> x = 1
+>>> t = 'tekst'
+>>> print(x)
+1
+>>> print(t)
+tekst
+>>> t.upper()
+'TEKST'
+>>> x.upper()
+Traceback (most recent call last):
+File "<pyshell#5>", line 1, in <module>
+x.upper()
+AttributeError: 'int' object has no attribute 'upper'
+\end{python}
+
+U načelu, ugrađene funkcije implementiraju radnje koje se mogu provoditi s više vrsta vrijednosti. Na primjer \mintinline{python}{print(t)} ispisuje tekstualni prikaz varijable \mintinline{python}{t} bez obzira na vrstu vrijednosti koja je toj varijabli pridružena. Hipotetska funkcija \mintinline{python}{upper(t)} bi dozvoljavala varijabli \mintinline{python}{t} da bude samo tekst pa ju je logičnije vezati uz samu vrijednost: \mintinline{python}{t.upper()}. \mintinline{python}{t.upper(t)} bi bilo u ovom slučaju redundantno pisati pa se pretpostavlja da metoda prima vrijednost prije točke kao prvi parametar. Na taj način je funkcija \mintinline{python}{upper} dostupna samo kroz tekstualne vrijednosti što pogoduje organizaciji kôda jer ju smješta u jedini kontekst u kojem je iskoristiva. Poziv \mintinline{python}{x.upper()} javlja grešku \mintinline{python}{AttributeError: 'int' object has no attribute 'upper'} jer objekti vrste \mintinline{python}{int} nemaju "mogućnost" odnosno metodu \mintinline{python}{upper}: to kod brojeva jednostavno nema smisla jer se veže uz koncept promjene veličine slova.
+
+\begin{important}{Metode}
+Metode su funkcije koje su vezane uz određenu vrstu vrijednosti i implicitno primaju tu vrijednost kao prvi parametar.
+\end{important}

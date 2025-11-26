@@ -1,0 +1,206 @@
+\subsection{Kalkulator}
+
+Probajmo iskoristiti koncepte i mehanizme koje smo do sada upoznali kako bi isprogramirali jednostavan kalkulator. Krenimo s jasnim nabrajanjem što taj program treba raditi i koji ulazni podaci su mu za to potrebni. 
+
+\begin{important}{Planiranje programa}
+Program valja prvo dobro isplanirati pa tek zatim implementirati. Dobra praksa je krenuti od rješavanja najjednostavnijeg mogućeg slučaja kao prototipa pa zatim razmisliti o nadogradnji mogućnosti i boljoj organizaciji kôda. 
+\end{important}
+
+Najjednostavniji slučaj za kalkulator bi mogao zvučati ovako:
+
+\begin{enumerate}
+    \item korisnik mora odabrati operaciju (npr. zbrajanje ili oduzimanje)
+    \item korisnik mora unijeti sve brojeve potrebne za odabranu operaciju
+    \item program mora izračunati rezultat ovisno o odabranoj operaciji
+    \item program mora prikazati rezultat korisniku
+\end{enumerate}
+
+Implementirajte opisani program. Struktura programa je vrlo slična primjeru \ref{listing:kviz}, ali valja razmisliti i o vrstama vrijednosti\footnote{Koju vrstu vrijednosti vraća funkcija \mintinline{python}{input}?}. Pokušajte napisati ovaj program prije no što nastavite čitati skriptu!
+
+\newpage
+
+Vrlo jednostavnu, dobro komentiranu i pogrešnu implementaciju ovog programa vidimo na primjeru \ref{listing:calc_naive}.
+
+\pythonfile{Kalkulator - naivna implementacija}{listing:calc_naive}{code_python_osnove/calc/naive.py}
+
+Program smo podijelili u tri sekcije: unos ulaznih podataka, izračun i ispis rezultata. 
+
+Zadaća u "unosu ulaznih podataka" je dobiti potrebne informacije od korisnika odnosno varijable \mintinline{python}{operation}, \mintinline{python}{n1} i \mintinline{python}{n2}. U našem programu, korisnik vrijednosti ručno unosi u komandnu liniju. S dodatnim komponentama, program bi mogao imati i grafičko sučelje što bi samo značilo zamjenu komandne linije s grafičkim sučeljem za potrebe unosa ulaznih podataka i prikaz rezultata. Kompleksnost programa bi ovime znatno porasla i primjer bi zahtijevao puno bolju organizaciju i apstrakciju kôda na što još nismo spremni. Zadaća dijela "izračun" je izračunati rezultate i naposljetku u "ispisu rezultata" se korisnika informira o rezultatima. Ovakva podjela programa je vrlo svrsishodna kad program krene rasti jer jasno raščlanjujemo kôd prema zadacima koje mora obaviti.
+
+\begin{important}{Podjela odgovornosti}
+Programe je dobro odvajati u različite dijelove sa jasnim zadaćama. Korisnički unos (odnosno sučelje), izračun i izvještavanje su neke zadaće koje će nam često biti svrsishodne.
+\end{important}
+
+Ipak program je pogrešan. Pogledajmo rezultat ovog programa:
+
+\begin{pythonp}{\ref{listing:calc_naive}}
+Unesi prvi broj: 1
+Odaberi operator (+,-): +
+Unesi drugi broj: 1
+
+Rezultat je:  11
+
+Program je završio s radom, pritisni <enter> za kraj.
+\end{pythonp}
+
+Kao što vidimo, rezultat izračuna \mintinline{python}{1 + 1} je prema našem programu \mintinline{python}{11}. U čemu je problem? Greškom smo napravili program koji kada unesemo operator \mintinline{python}{+} on zapravo spaja tekst, a ne zbraja brojeve! Naime, funkcija \mintinline{python}{input} uvijek vraća \mintinline{python}{str}. Taj tekst je potrebno pretvoriti u bojeve prije no što s njima pokušamo raditi aritmetičke operacije. Da smo pokušali oduzimati, naš program bi se srušio jer tekst ne podržava operator \mintinline{python}{-}.
+
+Naš program ima još jedan manji problem: ako korisnik upiše razmak prije ili poslije operatora isti se neće prepoznati u recima 12 i 14. Upravo su razmaci prije ili poslije česta greška u korisničkom unosu jer su teški za vizualno uočiti i često se javljaju uslijed kopiranja teksta.
+
+U svakom slučaju, podatke zaprimljene od korisnika je potrebno pripremiti. Potrebno je, dakle, pretvoriti tekst u brojeve i maknuti razmake oko operatora. Koju funkciju možemo iskoristiti za pretvaranje teksta u broj? Iz poglavlja \ref{podaci} znamo da su to \mintinline{python}{int}\index{broj!int} i \mintinline{python}{float}\index{broj!float}. Koju od ove dvije funkcije biste odabrali? Ako iskoristimo \mintinline{python}{float} dopustiti ćemo upotrebu i cijelih i decimalnih brojeva pa iskoristimo tu funkciju kako bismo natjerali naš program da zaista računa s brojevima. S tekstom još nismo detaljno radili, ali ovaj primjer može poslužiti kao uvod. Iskoristiti ćemo metodu \mintinline{python}{str.split} kako bismo maknuli "prazan prostor" koji prethodi ili dolazi nakon operatora. Time ćemo pripremiti ulazne vrijednosti za daljnji rad. Dorađeni program je vidljiv na primjeru \ref{listing:calc_types}
+
+\pythonfile{Kalkulator - priprema ulaznih podataka}{listing:calc_types}{code_python_osnove/calc/types.py}
+
+Sada program provodi aritmetičke operacije s brojevima i ignorira prazan prostor oko operatora. Rezultat je sljedeći:
+
+\begin{pythonp}{\ref{listing:calc_types}}
+Unesi prvi broj: 3.14
+Odaberi operator (+,-):    +
+Unesi drugi broj: 25
+
+Rezultat je:  28.14
+
+Program je završio s radom, pritisni <enter> za kraj.
+\end{pythonp}
+
+Nakon zaprimanja i pripreme korisničkog unosa, program provodi same izračune. Ova komponenta zapravo obavlja glavnu radnju cijelog programa. Obzirom da smo već sve potrebne informacije priredili i provjerili, ovaj dio programa ne mora provjeravati za postojanje i valjanost unosa. Tako i treba biti. U ovom slučaju, sam izračun je vrlo jednostavan pa smo mogli i sve odraditi u jednoj komponenti, ali ovo bi nas učilo krivom pristupu programskoj arhitekturi (iako u ovom primjeru ona ionako nije najbolje postavljena). U svakom slučaju, zadaća ovog dijela programa je jednostavno da proizvede varijablu \mintinline{python}{result} u odnosu na ulazne parametre (odnosno unos brojeva i operacije). Obzirom da koristimo i \mintinline{python}{else} komponentu naredbe \mintinline{python}{if}, garantiramo da će varijabla \mintinline{python}{result} postojati nakon što se provede taj kondicional. Ako \mintinline{python}{operator} nije prepoznat, varijabla \mintinline{python}{result} će se postaviti na vrijednost \mintinline{python}{None} što i ilustrira dobru upotrebu te vrste vrijednosti. Vrijednost \mintinline{python}{0}, na primjer, nije dovoljna za ovu svrhu jer ona može biti i validan rezultat izračuna.
+
+Zadaća zadnjeg dijela programa je da korisnika obavijesti o rezultatu. U ovom slučaju, radi se o jednostavnom ispisu u komandnu liniju i zatim sprječavanja da se prozor zatvori prije no što je korisnik vidio rezultate. Kao što smo već rekli, ulazi i izlazi su uz dodatan rad mogli biti realizirani i kroz kakvo grafičko sučelje. Ulazi i izlazi, međutim, ne moraju nužno biti orijentirani prema ljudskom korisniku. Podaci za pokretanje programa mogu se čitati iz neke podatkovne datoteke, baze podataka ili \textit{online} izvora, a izlazi također mogu biti u datoteku, bazu ili neki web sustav. Upravo zato nam je i korisno odvajati ove komponente programa.
+
+Ipak, za sada pripremu podataka radimo na najjednostavniji mogući način koji pretpostavlja da je korisnik apsolutno točno upisao neki broj. Drugim riječima, ako je korisnik upisao bilo koji znak osim znamenki 0-9 i znaka ".", program će javiti grešku i prekinuti rad. Obzirom da koristimo vrstu \mintinline{python}{float}, dopuštamo cijele i decimalne brojeve koji pretpostavljaju, kao što Python pretpostavlja, decimalnu točku. Da smo ovdje koristili vrstu vrijednosti \mintinline{python}{int}, unos decimalnog broja bi javljao grešku pa je vrsta \mintinline{python}{float} primjerenija. U svakom slučaju, decimalan zarez nije dopušten i ako ga korisnik unese dogoditi će se greška u programu. Već vidimo prvu moguću doradu programa, ali problem je širi od upotrebe zareza. Ako korisnik unese bilo koji tekst koji funkcija \mintinline{python}{float} ne može interpretirati kao decimalan broj, program će javiti grešku i završiti s izvršavanjem. Iz perspektive korisnika koji ga je pokrenuo kroz ikonu python datoteke, "srušit će se" bez poruke zašto. Kako bi izbjegli da se program ruši prilikom pogrešnog unosa broja, možemo iskoristiti naredbu \mintinline{python}{try}\index{try} kako je prikazano u primjeru \ref{listing:calc_try}.
+
+\pythonfile{Kalkulator - izbjegavanje rušenja prilikom pogrešnog unosa}{listing:calc_try}{code_python_osnove/calc/try.py}
+
+U ovom primjeru smo vidjeli i funkciju \mintinline{python}{quit} koja ne prima parametre i jednostavno prekida izvršavanje programa. Sav kôd nakon funkcije \mintinline{python}{quit} se neće izvršavati ukoliko se izvrši ta funkcija. Obzirom da je u našem primjeru ta funkcija u naredbi \mintinline{python}{try}, neće se izvršavati uvijek već samo kada se dogodi greška koja bi priječila daljnje izvršavanje programa. U prikazanom slučaju je to kada program nije dobio validne ulaze i ne bi imalo smisla nastavljati s radom. Primjer možemo vidjeti u akciji na sljedećem ispisu:
+
+\begin{pythonp}{\ref{listing:calc_try}}
+Unesi prvi broj: 3.14
+Odaberi operator (+,-): +
+Unesi drugi broj: neću!
+
+GREŠKA: Oblik broja nije prepoznat! Program završava s radom.
+\end{pythonp}
+
+Kao što vidimo, program se sada ne ruši kad korisnik upiše pogrešan oblik broja i to čak ni kada korisnik prgavo (kakvi korisnici i jesu) upiše tekst \mintinline{python}{'neću!'} umjesto broja. Program nam je sada malo robusniji, ali ima više mogućih dorada. Jedna važna dorada je mogućnost da provede više operacija u jednom pokretanju programa. To  možemo postići pomoću onoga što već znamo o petlji \mintinline{python}{while}\index{petlja!while} koja se ponavlja broj beskonačan broj puta i prestaje samo kada korisnik zatraži izlazak iz programa. Rješenje je prikazano u primjeru \ref{listing:calc_while}.
+
+% TODO make box that breaks accross pages
+\pythonfile{Kalkulator - ponovno izvršavanje}{listing:calc_while}{code_python_osnove/calc/while.py}
+
+Kao što vidimo, cijeli postupak smo prebacili unutar beskonačne \mintinline{python}{while} petlje koja time ponavlja cijeli naš dosadašnji program. Program smo adaptirali tako što se prvo provjerava operacija jer kada korisnik odabere \mintinline{python}{'i'} nije ga uopće potrebno pitati za unos brojeva. Priprema operatora se odvija u retku 16 i dosadašnjoj pripremi smo dodali metodu \mintinline{python}{str.lower}. Ta metoda pretvara sva slova u mala i osigurava da naš program radi i kada je korisnik unio veliko slovo \mintinline{python}{'I'} kao operaciju. Ovdje već vidimo neke mogućnosti i specifičnosti u radu s tekstom putem programiranja. Velika i mala slova su računalu različiti znakovi, a \mintinline{python}{'\n'} se referira na znak za novi redak. Detalje ćemo vidjeti u idućem poglavlju jer detalji rada s tekstom zahtijevaju poglavlje za sebe.
+
+Naš kalkulator je još uvijek vrlo primitivan, zna samo zbrajati i oduzimati, ali demonstrira nam mnoge različite koncepte u programiranju. Omogućava ponovljene radnje i otporan je na najčešće korisničke greške. Korištenje programa sada izgleda ovako:
+
+\begin{pythonp}{\ref{listing:calc_while}}
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: +
+Unesi prvi broj: 3.14
+Unesi drugi broj: 25
+
+Rezultat je:  28.14
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: -
+Unesi prvi broj: 2
+Unesi drugi broj: 7
+
+Rezultat je:  -5.0
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: x
+
+GREŠKA: Odabrana je nepoznata operacija, pokušaj ponovo!
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: +
+Unesi prvi broj: 42
+Unesi drugi broj: neću
+
+GREŠKA: Oblik broja nije prepoznat! Pokušaj ponovo.
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz:   I
+
+----------
+Program je završio s radom, pritisni <enter> za kraj.
+\end{pythonp}
+
+Ipak, program je prebanalan kako bi bio od koristi kao stvaran kalkulator. Recimo da želimo zadovoljiti još barem dvije mogućnosti: 
+
+\begin{enumerate}
+    \item lagano dodavanje novih operacija u program, uključujući i onih koje zahtijevaju unos samo jednog operatora
+    \item korištenje drugih oblika brojeva, poput decimalnih brojeva sa zarezom umjesto točke i brojeva koji sadrže razdjelnik tisućica
+\end{enumerate}
+
+Mogli bi sada ovaj program raspisati kako bi zadovoljili opisane mogućnosti, ali ovo zapravo ne bi bila dobra ideja. Naime, naš program postaje kompleksniji i kompleksniji i u ovom obliku će ga dakle biti sve teže i teže održavati i nadopunjavati. Ovaj program je također napisan posve proceduralno: svi reci kôda se izvršavaju jedan za drugim. To je recept koji slijedimo od retka do retka. Bolje bi bilo prvo naučiti definirati vlastite funkcije i vrste podataka pa se zatim vratiti na ovaj problem kad budemo naoružani znanjem kako kôd generalizirati i apstrahirati.
+
+\begin{comment}
+Prvi zadatak nam je dopustiti unos zareza kao mogućeg decimalnog znaka. Prije no što se bacimo na kôdiranje, usredotočimo se na jasnu definiciju problema. Koje od sljedećih unosa ćemo smatrati valjanim unosom: "3", "3.14", "3,14" i "3.140,14"? Odluka je u potpunosti na nama. Bilo bi, naravno, smisleno dopustiti unos i cijelih i decimalnih brojeva. Cijeli nam nisu problem, ali koja nam je odluka za oblik decimalnog broja? Moguće jednostavno rješenje je dopustiti i decimalnu točku i decimalan zarez, ali samo ako pojavljuju samo jednom u broju i to ne zajedno u istom broju. Drugim riječima i "3.14" i "3,14" ćemo smatrati decimalnim brojem, a brojeve poput "3.140,14" ne dopuštamo kao unos. U ovom slučaju dopuštamo dva najčešća oblika decimalnih brojeva, ali ne dopuštamo korištenje znakova "." ili "," kao razdjelnika tisućica. Matematički gledano, ovo možda i nije najbolje rješenje jer dopušta brkanje značenja znakova "." i ",". Ovdje ga prikazujemo kako bi osvijestili slobodu odlučivanja prilikom programiranja i demonstrirali neke jednostavne mogućnosti s vrstom vrijednosti \mintinline{python}{str}. U ozbiljnijem programu bi bilo bolje dopustiti da korisnik u postavkama programa odluči koji će oblik broja koristiti ili da se iste čitaju iz postavki operacijskog sustava, a za sada pogledajmo kako bi izgledalo predloženo rješenje:
+
+% \pythonfile{Kalkulator 2}{listing:kalk2}{code_python_osnove/calc/b.py}
+
+Dodali smo za sve ulazne brojeve jednostavno pravilo: ako je korisnik iskoristio točno jedan zarez i nije koristio točku u broju, tada pretvori zarez u točku kako bi Python taj broj prihvatio kao \mintinline{python}{float}. Na ovaj način, korisniku je dopušteno koristiti i zarez, ali program ipak zadržava malo opreza prilikom tumačenja toga što će smatrati valjanim brojem. Također, vidimo da smo ponovili istu proceduru za dva broja. Tu proceduru smo ovdje ponovili ponavljanjem kôda, a kasnije ćemo naučiti kako bolje strukturirati i generalizirati kôd u ovakvim slučajevima jer ovakvo ponavljanje u načelu valja izbjegavati.
+
+
+
+
+
+% \pythonfile{Kalkulator 4}{listing:kalk4}{code_python_osnove/calc/abcd.py}
+
+
+
+Također, dodali smo provjeru poznatih operacija kako bi korisnika odmah ponovo pitali za operaciju čim unese neku koja nije prepoznat te smo dio u kojemu se presreće greška vezana uz pretvaranje teksta u broj preradili tako da u slučaju greške više ne izlazi iz programa već ponovno pokrene cijeli postupak i time korisniku omogući unos novih vrijednosti za operande.
+
+\pagebreak
+
+Izvršavanje našeg programa sada izgleda ovako:
+
+\begin{pythonp}{\ref{listing:kalk4}}
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: +
+Unesi prvi broj: 38,86
+Unesi drugi broj: 3,14
+
+Rezultat je:  42.0
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: 2
+
+GREŠKA: Odabrana je nepoznata operacija, pokušaj ponovo!
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: -
+Unesi prvi broj: 2
+Unesi drugi broj: -
+
+GREŠKA: Oblik broja nije prepoznat! Pokušaj ponovo.
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: -
+Unesi prvi broj: 2
+Unesi drugi broj: 2
+
+Rezultat je:  0.0
+
+----------
+
+Odaberi operator (+,-) ili unesi "i" za izlaz: i
+
+Program je završio s radom, pritisni <enter> za kraj.
+\end{pythonp}
+
+U prikazani program bi mogli dodati i kojekakve druge operacije, ali kako program raste tako će nam struktura programa iz ovog primjera postati sve teža i teža za nadopunjavati, a već i sada postaje problematična. Postoje bolji načini strukturiranja kôda koji su osmišljeni upravo kako bi se kôdom moglo lakše upravljati. Ovom primjeru ćemo se zato vratiti kada naučimo strukture podataka i definiciju vlastitih funkcija te naučiti kako pametnije strukturirati ovaj program.
+    \item dopusti odabir više različitih operacija, uključujući i npr. drugi korijen koji zahtijeva unos samo jednog broja, a ne dva broja
+\item dopusti korisniku da koristi decimalan zarez umjesto decimalne točke
+\end{enumerate}
+
+Drugi zadatak nije težak za osmisliti, ali bi nam krenuo duplati kôd i značajno povećavati kompleksnost rasta ovog programa. Za treći zadatak bismo morali znati više o tekstu i kada bi ga spojili s drugim to bi dodatno povećalo kompleksnost programa. Prvi zadatak ćemo stoga riješiti odmah, a kod druga dva prikazati problem u rastu kompleksnosti, a kvalitetnija rješenja ćemo prikazati kada naučimo više o tekstu i kada naučimo definirati vlastite funkcije.
+\end{comment}
